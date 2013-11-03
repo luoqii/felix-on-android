@@ -9,6 +9,7 @@ import java.util.HashMap;
 import org.apache.felix.framework.FrameworkFactory;
 import org.apache.felix.main.AutoProcessor;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.framework.launch.Framework;
@@ -27,21 +28,25 @@ public class FelixWrapper{
 	private Framework mFramework;
 	private String mCacheDir;
 	private String mBundleDir;
-	
+
 	private FelixWrapper(Context context){
 		mCacheDir = context.getDir(OSGI_BUNDLE_CACHE_DIR, Context.MODE_WORLD_WRITEABLE).toString();
 		mBundleDir = context.getDir(OSGI_BUNDLE_DIR, Context.MODE_WORLD_WRITEABLE).toString();;
 		extractPreloadBundle(context);
 		
-		HashMap<String, String> parameters = new HashMap<String, String>();
-		parameters.put(Constants.FRAMEWORK_STORAGE, mCacheDir);
-		parameters.put(AutoProcessor.AUTO_DEPLOY_DIR_PROPERY, mBundleDir);
-		parameters.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA, ANDROID_PACKAGES_FOR_EXPORT);
-		mFramework = new FrameworkFactory().newFramework(parameters);
+		HashMap<String, String> configMap = new HashMap<String, String>();
+		configMap.put(Constants.FRAMEWORK_STORAGE, mCacheDir);
+		configMap.put(AutoProcessor.AUTO_DEPLOY_DIR_PROPERY, mBundleDir);
+		configMap.put(AutoProcessor.AUTO_DEPLOY_ACTION_PROPERY, 
+				AutoProcessor.AUTO_DEPLOY_INSTALL_VALUE + "," + AutoProcessor.AUTO_DEPLOY_START_VALUE);
+		configMap.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA, ANDROID_PACKAGES_FOR_EXPORT);
+		mFramework = new FrameworkFactory().newFramework(configMap);
 		
 		Log.d(TAG, "init & start osgi." );
 		try {
 			mFramework.init();
+			AutoProcessor.process(configMap, mFramework.getBundleContext());
+			
 			mFramework.start();
 		} catch (BundleException e) {
 			// TODO Auto-generated catch block
@@ -54,6 +59,10 @@ public class FelixWrapper{
 		for (Bundle b : bundles) {
 			Log.d(TAG, "b: " + b.getBundleId());
 		}
+	}
+	
+	public Framework getFramework(){
+		return mFramework;
 	}
 	
 	private void extractPreloadBundle(Context context) {
