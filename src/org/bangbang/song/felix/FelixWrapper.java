@@ -29,8 +29,8 @@ public class FelixWrapper{
 	private String mBundleDir;
 	
 	private FelixWrapper(Context context){
-		mCacheDir = context.getDir(OSGI_BUNDLE_CACHE_DIR, 0).toString();
-		mBundleDir = context.getDir(OSGI_BUNDLE_DIR, 0).toString();;
+		mCacheDir = context.getDir(OSGI_BUNDLE_CACHE_DIR, Context.MODE_WORLD_WRITEABLE).toString();
+		mBundleDir = context.getDir(OSGI_BUNDLE_DIR, Context.MODE_WORLD_WRITEABLE).toString();;
 		extractPreloadBundle(context);
 		
 		HashMap<String, String> parameters = new HashMap<String, String>();
@@ -47,7 +47,7 @@ public class FelixWrapper{
 			e.printStackTrace();
 		}
 		
-		Log.d(TAG, "osgi state:" + mFramework.getState());
+		Log.d(TAG, "OSGi framework running, state: " + mFramework.getState());
 		
 		Bundle[] bundles = mFramework.getBundleContext().getBundles();
 		for (Bundle b : bundles) {
