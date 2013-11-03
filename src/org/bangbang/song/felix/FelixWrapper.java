@@ -18,6 +18,12 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.util.Log;
 
+/**
+ * 
+ * @see [felix source] main/src/main/java/org/apache/felix/main/Main.java
+ * @author bangbang.song@gmail.com
+ *
+ */
 public class FelixWrapper{
 	private static final String TAG = FelixWrapper.class.getSimpleName();
 	
