@@ -36,6 +36,7 @@ public class FelixWrapper{
 		HashMap<String, String> parameters = new HashMap<String, String>();
 		parameters.put(Constants.FRAMEWORK_STORAGE, mCacheDir);
 		parameters.put(AutoProcessor.AUTO_DEPLOY_DIR_PROPERY, mBundleDir);
+		parameters.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA, ANDROID_PACKAGES_FOR_EXPORT);
 		mFramework = new FrameworkFactory().newFramework(parameters);
 		
 		Log.d(TAG, "init & start osgi." );
@@ -91,4 +92,79 @@ public class FelixWrapper{
 		}
 		return sInstance;
 	}
+	
+	// copied from http://code.google.com/p/felix-on-android/
+	private static final String ANDROID_PACKAGES_FOR_EXPORT= 
+	        // ANDROID (here starts semicolon as separator -> Why?
+	        "android, " + 
+	        "android.app," + 
+	        "android.content," + 
+	        "android.database," + 
+	        "android.database.sqlite," + 
+	        "android.graphics, " + 
+	        "android.graphics.drawable, " + 
+	        "android.graphics.glutils, " + 
+	        "android.hardware, " + 
+	        "android.location, " + 
+	        "android.media, " + 
+	        "android.net, " + 
+	        "android.opengl, " + 
+	        "android.os, " + 
+	        "android.provider, " + 
+	        "android.sax, " + 
+	        "android.speech.recognition, " + 
+	        "android.telephony, " + 
+	        "android.telephony.gsm, " + 
+	        "android.text, " + 
+	        "android.text.method, " + 
+	        "android.text.style, " + 
+	        "android.text.util, " + 
+	        "android.util, " + 
+	        "android.view, " + 
+	        "android.view.animation, " + 
+	        "android.webkit, " + 
+	        "android.widget, " + 
+	        // JAVAx
+	        "javax.crypto; " + 
+	        "javax.crypto.interfaces; " + 
+	        "javax.crypto.spec; " + 
+	        "javax.microedition.khronos.opengles; " + 
+	        "javax.net; " + 
+	        "javax.net.ssl; " + 
+	        "javax.security.auth; " + 
+	        "javax.security.auth.callback; " + 
+	        "javax.security.auth.login; " + 
+	        "javax.security.auth.x500; " + 
+	        "javax.security.cert; " + 
+	        "javax.sound.midi; " + 
+	        "javax.sound.midi.spi; " + 
+	        "javax.sound.sampled; " + 
+	        "javax.sound.sampled.spi; " + 
+	        "javax.sql; " + 
+	        "javax.xml.parsers; " + 
+	        //JUNIT
+	        "junit.extensions; " + 
+	        "junit.framework; " + 
+	        //APACHE
+	        "org.apache.commons.codec; " + 
+	        "org.apache.commons.codec.binary; " + 
+	        "org.apache.commons.codec.language; " + 
+	        "org.apache.commons.codec.net; " + 
+	        "org.apache.commons.httpclient; " + 
+	        "org.apache.commons.httpclient.auth; " + 
+	        "org.apache.commons.httpclient.cookie; " + 
+	        "org.apache.commons.httpclient.methods; " + 
+	        "org.apache.commons.httpclient.methods.multipart; " + 
+	        "org.apache.commons.httpclient.params; " + 
+	        "org.apache.commons.httpclient.protocol; " + 
+	        "org.apache.commons.httpclient.util; " + 
+	        
+	        //OTHERS
+	        "org.bluez; " + 
+	        "org.json; " + 
+	        "org.w3c.dom; " + 
+	        "org.xml.sax; " + 
+	        "org.xml.sax.ext; " + 
+	        "org.xml.sax.helpers; " +
+	        "net.neosum.android.view;";
 }
