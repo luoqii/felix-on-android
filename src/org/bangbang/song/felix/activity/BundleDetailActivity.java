@@ -1,6 +1,7 @@
 package org.bangbang.song.felix.activity;
 
 import org.bangbang.song.felix.FelixWrapper;
+import org.bangbang.song.felix.util.OsgiUtil;
 import org.bangbang.song.felixonandroid.R;
 
 import android.app.Activity;
@@ -28,7 +29,7 @@ public class BundleDetailActivity extends Activity {
 				 + "id: " + b.getBundleId() + "\n"
 				 + "version: " + b.getVersion() + "\n"
 				 + "location: " + b.getLocation() + "\n"
-				 + "state: " + b.getState() + "\n"
+				 + "state: " + OsgiUtil.bundleState2Str(b.getState()) + "\n"
 				 + "headers: " + b.getHeaders() + "\n"
 				;
 		return str;
