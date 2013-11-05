@@ -9,7 +9,6 @@ import java.util.HashMap;
 import org.apache.felix.framework.FrameworkFactory;
 import org.apache.felix.main.AutoProcessor;
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.framework.launch.Framework;
@@ -20,7 +19,8 @@ import android.util.Log;
 
 /**
  * 
- * @see [felix source] main/src/main/java/org/apache/felix/main/Main.java
+ * @see <a href="http://felix.apache.org/site/apache-felix-framework-and-google-android.html">felist-on-android</a>
+ * @see {felix source}/main/src/main/java/org/apache/felix/main/Main.java
  * @author bangbang.song@gmail.com
  *
  */
