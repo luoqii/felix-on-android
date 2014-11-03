@@ -6,7 +6,7 @@
 
     <uses-sdk
         android:minSdkVersion="8"
-        android:targetSdkVersion="17" />
+        android:targetSdkVersion="21" />
 
     <application
         android:name="org.bangbang.song.felix.App"
@@ -16,7 +16,7 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="org.bangbang.song.felix.activity.BundleListActivity"
-            android:label="bundles" >
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

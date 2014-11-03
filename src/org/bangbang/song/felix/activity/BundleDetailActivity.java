@@ -1,5 +1,8 @@
 package org.bangbang.song.felix.activity;
 
+import java.util.Dictionary;
+import java.util.Enumeration;
+
 import org.bangbang.song.felix.FelixWrapper;
 import org.bangbang.song.felix.util.OsgiUtil;
 import org.bangbang.song.felixonandroid.R;
@@ -30,8 +33,19 @@ public class BundleDetailActivity extends Activity {
 				 + "version: " + b.getVersion() + "\n"
 				 + "location: " + b.getLocation() + "\n"
 				 + "state: " + OsgiUtil.bundleState2Str(b.getState()) + "\n"
-				 + "headers: " + b.getHeaders() + "\n"
+				 + "headers: " + (b.getHeaders()) + "\n"
 				;
+		return str;
+	}
+	
+	String toString(Dictionary<String, String> d) {
+		String str = "";
+		Enumeration<String> e = d.keys();
+		while (e != null && e.hasMoreElements()) {
+			str += e + ": " + d.get(e) + "\n";
+			e.nextElement();
+		}
+		
 		return str;
 	}
 

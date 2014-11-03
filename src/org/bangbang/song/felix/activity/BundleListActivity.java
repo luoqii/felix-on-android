@@ -2,6 +2,7 @@ package org.bangbang.song.felix.activity;
 
 import org.bangbang.song.felix.FelixWrapper;
 import org.bangbang.song.felixonandroid.R;
+import org.osgi.framework.BundleException;
 import org.osgi.framework.launch.Framework;
 
 import android.app.Activity;
@@ -11,6 +12,7 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -41,6 +43,22 @@ public class BundleListActivity extends Activity {
 				startActivity(detail);
 			}
 		});
+//		mBundles.setOnItemLongClickListener(new OnItemLongClickListener() {
+//
+//			@Override
+//			public boolean onItemLongClick(AdapterView<?> parent, View view,
+//					int position, long id) {
+//				org.osgi.framework.Bundle b = (org.osgi.framework.Bundle) parent.getAdapter().getItem(position);
+//				
+//				try {
+//					b.start();
+//				} catch (BundleException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//				return false;
+//			}
+//		});
 	}
 
 	@Override
