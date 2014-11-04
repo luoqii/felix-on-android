@@ -3,6 +3,8 @@ package org.bangbang.song.felix.util;
 import java.util.HashMap;
 import java.util.Map;
 
+import android.text.TextUtils;
+
 public class OsgiUtil {
     static Map<Integer, String> sStateMap = new HashMap<Integer, String>();
     static {
@@ -19,5 +21,15 @@ public class OsgiUtil {
             str = sStateMap.get(state);
         }
         return str;
+    }
+    
+    public static String getName (org.osgi.framework.Bundle b) {
+    	String name = "";
+    	name = b.getSymbolicName();
+    	if (TextUtils.isEmpty(name)) {
+    		name = b.getLocation();
+    	}
+    	
+    	return name;
     }
 }
