@@ -30,7 +30,9 @@ public class FelixWrapper{
 	
 	private static final String OSGI_BUNDLE_DIR = "osgi_bundle";
 	private static final String OSGI_BUNDLE_CACHE_DIR = "osgi_bundlecache";
+	
 	private static final String ASSERT_PRELOAD_BUNDLE_DIR = "felix/preloadbundle";
+	
 	private static FelixWrapper sInstance;
 	private Framework mFramework;
 	private String mCacheDir;
@@ -43,11 +45,14 @@ public class FelixWrapper{
 		
 		HashMap<String, String> configMap = new HashMap<String, String>();
 		configMap.put(Constants.FRAMEWORK_STORAGE, mCacheDir);
+		configMap.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA, ANDROID_PACKAGES_FOR_EXPORT);
+		
 		configMap.put(AutoProcessor.AUTO_DEPLOY_DIR_PROPERY, mBundleDir);
 		configMap.put(AutoProcessor.AUTO_DEPLOY_ACTION_PROPERY, 
 				AutoProcessor.AUTO_DEPLOY_INSTALL_VALUE + "," + AutoProcessor.AUTO_DEPLOY_START_VALUE);
-		configMap.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA, ANDROID_PACKAGES_FOR_EXPORT);
+		
 		configMap.put(FelixConstants.LOG_LEVEL_PROP, 4 + "");
+		
 		mFramework = new FrameworkFactory().newFramework(configMap);
 		
 		Log.d(TAG, "init & start osgi." );
