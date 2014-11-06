@@ -1,4 +1,4 @@
-package org.bangbang.song.felix;
+package org.bbs.felix;
 
 import android.app.Application;
 

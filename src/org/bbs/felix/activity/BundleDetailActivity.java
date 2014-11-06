@@ -1,14 +1,12 @@
-package org.bangbang.song.felix.activity;
+package org.bbs.felix.activity;
 
-import java.util.Dictionary;
-import java.util.Enumeration;
-
-import org.bangbang.song.felix.FelixWrapper;
-import org.bangbang.song.felix.util.OsgiUtil;
 import org.bangbang.song.felixonandroid.R;
+import org.bbs.felix.FelixWrapper;
+import org.bbs.felix.util.OsgiUtil;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.Menu;
 import android.widget.TextView;
 
@@ -24,7 +22,9 @@ public class BundleDetailActivity extends Activity {
 		org.osgi.framework.Bundle b = FelixWrapper.getInstance(this).getFramework()
 				.getBundleContext().getBundle(bId);
 		
-		((TextView)findViewById(R.id.detail)).setText(toString(b));
+		TextView text = ((TextView)findViewById(R.id.detail));
+		text.setText(toString(b));
+		text.setMovementMethod(new  ScrollingMovementMethod());
 	}
 
 	private CharSequence toString(org.osgi.framework.Bundle b) {
@@ -33,20 +33,13 @@ public class BundleDetailActivity extends Activity {
 				 + "version: " + b.getVersion() + "\n"
 				 + "location: " + b.getLocation() + "\n"
 				 + "state: " + OsgiUtil.bundleState2Str(b.getState()) + "\n"
-				 + "headers: " + (b.getHeaders()) + "\n"
+				 + "headers: \n" + getHeader(b) + "\n"
 				;
 		return str;
 	}
 	
-	String toString(Dictionary<String, String> d) {
-		String str = "";
-		Enumeration<String> e = d.keys();
-		while (e != null && e.hasMoreElements()) {
-			str += e + ": " + d.get(e) + "\n";
-			e.nextElement();
-		}
-		
-		return str;
+	String getHeader(org.osgi.framework.Bundle b) {
+		return OsgiUtil.getHeader(b, OsgiUtil.HEADER_OSGI);
 	}
 
 	@Override

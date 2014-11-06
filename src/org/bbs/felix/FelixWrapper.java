@@ -1,4 +1,4 @@
-package org.bangbang.song.felix;
+package org.bbs.felix;
 
 import java.io.FileOutputStream;
 import java.io.IOException;

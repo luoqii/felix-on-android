@@ -1,8 +1,8 @@
-package org.bangbang.song.felix.activity;
+package org.bbs.felix.activity;
 
-import org.bangbang.song.felix.FelixWrapper;
-import org.bangbang.song.felix.util.OsgiUtil;
 import org.bangbang.song.felixonandroid.R;
+import org.bbs.felix.FelixWrapper;
+import org.bbs.felix.util.OsgiUtil;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.launch.Framework;
 
