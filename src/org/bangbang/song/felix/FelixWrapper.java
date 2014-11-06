@@ -7,6 +7,7 @@ import java.io.OutputStream;
 import java.util.HashMap;
 
 import org.apache.felix.framework.FrameworkFactory;
+import org.apache.felix.framework.util.FelixConstants;
 import org.apache.felix.main.AutoProcessor;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
@@ -46,6 +47,7 @@ public class FelixWrapper{
 		configMap.put(AutoProcessor.AUTO_DEPLOY_ACTION_PROPERY, 
 				AutoProcessor.AUTO_DEPLOY_INSTALL_VALUE + "," + AutoProcessor.AUTO_DEPLOY_START_VALUE);
 		configMap.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA, ANDROID_PACKAGES_FOR_EXPORT);
+		configMap.put(FelixConstants.LOG_LEVEL_PROP, 4 + "");
 		mFramework = new FrameworkFactory().newFramework(configMap);
 		
 		Log.d(TAG, "init & start osgi." );
@@ -181,5 +183,7 @@ public class FelixWrapper{
 	        "org.xml.sax; " + 
 	        "org.xml.sax.ext; " + 
 	        "org.xml.sax.helpers; " +
-	        "net.neosum.android.view;";
+	        
+	        // this no ';' or ',' , shit.
+	        "net.neosum.android.view";
 }

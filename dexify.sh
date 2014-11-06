@@ -6,7 +6,7 @@
 dexify() {
     for f in $*; do
         tmpdir="`mktemp -d`"
-        tmpfile="${tmpdir}/classes.dex"
+        tmpfile="classes.dex"
         dx --dex --output=${tmpfile} ${f}
         aapt add ${f} ${tmpfile}
         rm -f ${tmpfile}
