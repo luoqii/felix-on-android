@@ -120,6 +120,11 @@ public class BundleDetailActivity extends FragmentActivity {
 		}
 		
 		@Override
+		public CharSequence getPageTitle(int position) {
+			return "id: " + mBundles[position].getBundleId();
+		}
+		
+		@Override
 		public int getCount() {
 			return mBundles.length;
 		}
