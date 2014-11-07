@@ -54,8 +54,7 @@ public class BundleListActivity extends Activity {
 	}
 
 	private void updateUI() {
-		Framework f = FelixWrapper.getInstance(this).getFramework();
-		org.osgi.framework.Bundle[] bundles = f.getBundleContext().getBundles();
+		org.osgi.framework.Bundle[] bundles = BundleList.getInstance().getBundles();
 		
 		ArrayAdapter<org.osgi.framework.Bundle> adapter 
 		= new ArrayAdapter<org.osgi.framework.Bundle>(this, android.R.layout.simple_list_item_1, bundles){
@@ -166,6 +165,33 @@ public class BundleListActivity extends Activity {
 			}
 		}
 		super.onActivityResult(requestCode, resultCode, data);
+	}
+	
+	public static class BundleList {
+		private static BundleList sInstance;
+		
+		private org.osgi.framework.Bundle[] mBundles;
+		
+		public static BundleList getInstance(){
+			if (sInstance == null){
+				sInstance = new BundleList();
+			}
+			
+			sInstance.syncWithOsgi();
+			return sInstance;
+		}
+		
+		private BundleList(){
+		}
+		
+		public org.osgi.framework.Bundle[] getBundles(){
+			return mBundles;
+		}
+
+		private void syncWithOsgi() {
+			Framework f = FelixWrapper.getInstance(null).getFramework();
+			mBundles = f.getBundleContext().getBundles();
+		}
 	}
 
 }
