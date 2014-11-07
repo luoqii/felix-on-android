@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.method.ScrollingMovementMethod;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -101,6 +102,7 @@ public class BundleDetailActivity extends FragmentActivity {
 			TextView text = new TextView(BundleDetailActivity.this);
 			text.setText(BundleDetailActivity.toString(b));
 			text.setTag(position);
+			text.setMovementMethod(new ScrollingMovementMethod());
 			
 			container.addView(text);
 			return text;
