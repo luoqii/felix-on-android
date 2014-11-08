@@ -1,5 +1,7 @@
 package org.bbs.felix.activity;
 
+import java.net.URL;
+
 import org.bbs.felix.FelixWrapper;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -32,7 +34,7 @@ public class BundleActivity extends Activity {
 		mActivateAgent.onCreate(savedInstanceState);
 	}
 	
-	ActivityAgent getActivator(){
+	ActivityAgent getActivator() {
 		ActivityAgent activator = null;
 		Intent intent = getIntent();
 		String serviceName =  intent.getStringExtra(EXTRA_SERVICE_NAME);
@@ -43,6 +45,9 @@ public class BundleActivity extends Activity {
 		BundleContext bundleContext = FelixWrapper.getInstance(null).getFramework().getBundleContext();
 		if (TextUtils.isEmpty(serviceFilter)) {
 			ServiceReference<?> s = bundleContext.getServiceReference(serviceName);
+			org.osgi.framework.Bundle b = s.getBundle();
+			b.get
+			URL url = b.getResource("");
 			activator = (ActivityAgent) bundleContext.getService(s);
 /*		} else {
 			activator = (ActivityActivator) bundleContext.getServiceReferences(serviceName, serviceFilter);*/
