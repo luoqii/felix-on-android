@@ -1,0 +1,7 @@
+Bundle-Name: English dictionary
+Bundle-Description: A bundle that registers an English dictionary service
+Bundle-Vendor: Apache Felix
+Bundle-Version: 1.0.0
+Bundle-Activator: org.bbs.bundlemgr.Activator
+Export-Package: org.bbs.bundlemgr
+Import-Package: org.osgi.framework,org.bbs.bundlemgr,android.os,android.content,android.app,android.view,android.widget,org.bbs.felix.activity

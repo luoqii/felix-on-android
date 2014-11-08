@@ -45,7 +45,7 @@ public class FelixWrapper{
 		
 		HashMap<String, String> configMap = new HashMap<String, String>();
 		configMap.put(Constants.FRAMEWORK_STORAGE, mCacheDir);
-		configMap.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA, ANDROID_PACKAGES_FOR_EXPORT);
+		configMap.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA, ANDROID_PACKAGES_FOR_EXPORT_EXTRA);
 		
 		configMap.put(AutoProcessor.AUTO_DEPLOY_DIR_PROPERY, mBundleDir);
 		configMap.put(AutoProcessor.AUTO_DEPLOY_ACTION_PROPERY, 
@@ -116,8 +116,11 @@ public class FelixWrapper{
 	}
 	
 	// copied from http://code.google.com/p/felix-on-android/
-	private static final String ANDROID_PACKAGES_FOR_EXPORT= 
+	private static final String ANDROID_PACKAGES_FOR_EXPORT_EXTRA = 
 	        // ANDROID (here starts semicolon as separator -> Why?
+			"org.bbs.felix.activity," +
+			"org.bbs.felix.activity.ActivityAgent," +
+			//android
 	        "android, " + 
 	        "android.app," + 
 	        "android.content," + 
@@ -132,6 +135,7 @@ public class FelixWrapper{
 	        "android.net, " + 
 	        "android.opengl, " + 
 	        "android.os, " + 
+	        "android.os.bundle, " + 
 	        "android.provider, " + 
 	        "android.sax, " + 
 	        "android.speech.recognition, " + 

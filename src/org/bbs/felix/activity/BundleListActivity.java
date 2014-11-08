@@ -98,19 +98,14 @@ public class BundleListActivity extends Activity {
 		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
 		org.osgi.framework.Bundle b = (org.osgi.framework.Bundle) mBundles.getAdapter().getItem(info.position);
 		try {
-			switch (item.getItemId()) {
-			case R.id.action_start:
+			int itemId = item.getItemId();
+			if (itemId == R.id.action_start) {
 				b.start();
-				break;
-			case R.id.action_stop:
+			} else if (itemId == R.id.action_stop) {
 				b.stop();
-				break;
-			case R.id.action_uninstall:
+			} else if (itemId == R.id.action_uninstall) {
 				b.uninstall();
-				break;
-
-			default:
-				break;
+			} else {
 			}
 		} catch (BundleException e) {
 			// TODO Auto-generated catch block
@@ -131,14 +126,13 @@ public class BundleListActivity extends Activity {
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.action_install:
-//			Intent intent = new Intent(Intent.ACTION_PICK);
+		int itemId = item.getItemId();
+		if (itemId == R.id.action_install) {
+			//			Intent intent = new Intent(Intent.ACTION_PICK);
 			Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-//			intent.setDataAndType(data, type);
+			//			intent.setDataAndType(data, type);
 			intent.setType("*/*");
 			startActivityForResult(intent, REAUEST_CODE_PICK_JAR);
-			break;
 		}
 		return super.onOptionsItemSelected(item);
 	}

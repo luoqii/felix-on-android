@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/FelixOnAndroid"/>
+	<classpathentry kind="lib" path="/FelixOnAndroid/libs/felix.jar"/>
+	<classpathentry kind="lib" path="/FelixOnAndroid/bin/felixonandroid.jar"/>
+	<classpathentry kind="lib" path="/mnt/workbench/adt-bundle-linux-x86_64-20131030/sdk/platforms/android-19/android.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

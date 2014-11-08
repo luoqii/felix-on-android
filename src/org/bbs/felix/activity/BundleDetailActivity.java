@@ -70,19 +70,14 @@ public class BundleDetailActivity extends FragmentActivity {
 		try {
 			int position = mViewPager.getCurrentItem();
 			org.osgi.framework.Bundle b = mBundles[position];
-			switch (item.getItemId()) {
-			case R.id.action_start:
+			int itemId = item.getItemId();
+			if (itemId == R.id.action_start) {
 				b.start();
-				break;
-			case R.id.action_stop:
+			} else if (itemId == R.id.action_stop) {
 				b.stop();
-				break;
-			case R.id.action_uninstall:
+			} else if (itemId == R.id.action_uninstall) {
 				b.uninstall();
-				break;
-
-			default:
-				break;
+			} else {
 			}
 			
 			mAdapter.notifyDataChanged(position);
