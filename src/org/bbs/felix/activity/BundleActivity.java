@@ -34,14 +34,19 @@ import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.widget.TextView;
 
 /**
- * delegate all call to {@link #mActivateAgent}
+ * if android call us call through to {@link #mActivateAgent};
+ * otherwise call super or do ourself.
+ * 
  * @author luoqii
  *
+ * @see {@link ActivityAgent}
  */
 public class BundleActivity extends 
 //Activity 
@@ -70,6 +75,12 @@ FragmentActivity
 	private String mServiceFilter;
 	private Resources mSourceMerger;
 	
+	public Resources getResources() {
+		// this will call before onCreate().
+		return mSourceMerger == null ? super.getResources() : mSourceMerger;
+	}
+
+	// life-cycle
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -85,7 +96,103 @@ FragmentActivity
 		}
 	}
 	
-	ActivityAgent getActivator() {
+	@Override
+	protected void onResume() {
+		super.onResume();
+		mActivateAgent.onResume();
+	}
+
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		mActivateAgent.onPause();
+	}
+
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		mActivateAgent.onDestroy();
+	}
+	
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onRestoreInstanceState(savedInstanceState);
+		mActivateAgent.onRestoreInstanceState(savedInstanceState);
+	}
+
+	@Override
+	protected void onPostCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onPostCreate(savedInstanceState);
+		mActivateAgent.onPostCreate(savedInstanceState);
+	}
+
+	@Override
+	protected void onRestart() {
+		// TODO Auto-generated method stub
+		super.onRestart();
+		mActivateAgent.onRestart();
+	}
+
+	// menu
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// TODO Auto-generated method stub
+		return mActivateAgent.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// TODO Auto-generated method stub
+		return mActivateAgent.onOptionsItemSelected(item);
+	}
+	
+	// keyevent
+	@Override
+	public boolean dispatchKeyEvent(KeyEvent event) {
+		if (mActivateAgent.dispatchKeyEvent(event)) {
+			return true;
+		}
+		return super.dispatchKeyEvent(event);
+	}
+
+	@Override
+	public boolean dispatchKeyShortcutEvent(KeyEvent event) {
+		if (mActivateAgent.dispatchKeyEvent(event)) {
+			return true;
+		}
+		return super.dispatchKeyShortcutEvent(event);
+	}
+
+	@Override
+	public boolean dispatchTouchEvent(MotionEvent ev) {
+		if (mActivateAgent.dispatchTouchEvent(ev)) {
+			return true;
+		}
+		return super.dispatchTouchEvent(ev);
+	}
+
+	@Override
+	public boolean dispatchTrackballEvent(MotionEvent ev) {
+		if (mActivateAgent.dispatchTrackballEvent(ev)) {
+			return true;
+		}
+		return super.dispatchTrackballEvent(ev);
+	}
+
+	@Override
+	public boolean dispatchGenericMotionEvent(MotionEvent ev) {
+		if (mActivateAgent.dispatchGenericMotionEvent(ev)) {
+			return true;
+		}
+		return super.dispatchGenericMotionEvent(ev);
+	}
+
+	// private method.
+	private ActivityAgent getActivator() {
 		ActivityAgent activator = null;
 		Intent intent = getIntent();
 		mServiceName =  intent.getStringExtra(EXTRA_SERVICE_NAME);
@@ -97,7 +204,7 @@ FragmentActivity
 		ServiceReference<?> s = null;
 		if (TextUtils.isEmpty(mServiceFilter)) {
 			s = bundleContext.getServiceReference(mServiceName);
- 		} else {
+		} else {
 			try {
 				s = bundleContext.getServiceReferences(mServiceName, mServiceFilter)[0];
 			} catch (InvalidSyntaxException e) {
@@ -115,31 +222,31 @@ FragmentActivity
 		
 		return activator;
 	}
-	
+
 	private Resources getBundleResources(org.osgi.framework.Bundle bundle) {
-		File resApk = getFileStreamPath("id" + bundle.getBundleId() + "_v" + bundle.getVersion());
-		if (!resApk.exists()) {
-			URL url = bundle.getResource(RES_PATH_APK_RES);
-			try {
-				InputStream ins = url.openStream();
-				OutputStream ous = new FileOutputStream(resApk);
-				final int LEN = 8 * 1024;
-				byte[] buff = new byte[LEN];
-				int read = -1;
-				while ((read = ins.read(buff)) != -1){
-					ous.write(buff, 0, read);
-//					Log.d(TAG, "" + new String(buff, 0, read));
+			File resApk = getFileStreamPath("id" + bundle.getBundleId() + "_v" + bundle.getVersion());
+			if (!resApk.exists()) {
+				URL url = bundle.getResource(RES_PATH_APK_RES);
+				try {
+					InputStream ins = url.openStream();
+					OutputStream ous = new FileOutputStream(resApk);
+					final int LEN = 8 * 1024;
+					byte[] buff = new byte[LEN];
+					int read = -1;
+					while ((read = ins.read(buff)) != -1){
+						ous.write(buff, 0, read);
+	//					Log.d(TAG, "" + new String(buff, 0, read));
+					}
+					ins.close();
+					ous.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-				ins.close();
-				ous.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
+			return loadApkResource(resApk.getAbsolutePath());
 		}
-		return loadApkResource(resApk.getAbsolutePath());
-	}
-	
+
 	private Resources loadApkResource(String apkFilePath) {
 		AssetManager assets = null;
 		try {
@@ -168,66 +275,6 @@ FragmentActivity
 			e.printStackTrace();
 		}
 		return null;
-	}
-
-	public Resources getResources() {
-		// this will call before onCreate().
-		return mSourceMerger == null ? super.getResources() : mSourceMerger;
-	}
-	
-		
-	@Override
-	protected void onResume() {
-		super.onResume();
-		mActivateAgent.onResume();
-	}
-
-
-
-	@Override
-	protected void onPause() {
-		// TODO Auto-generated method stub
-		super.onPause();
-		mActivateAgent.onPause();
-	}
-
-
-
-	@Override
-	protected void onDestroy() {
-		// TODO Auto-generated method stub
-		super.onDestroy();
-		mActivateAgent.onDestroy();
-	}
-	
-	
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// TODO Auto-generated method stub
-		return mActivateAgent.onCreateOptionsMenu(menu);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// TODO Auto-generated method stub
-		return mActivateAgent.onOptionsItemSelected(item);
-	}
-
-	
-
-
-	@Override
-	public void startActivityForResult(Intent intent, int requestCode) {
-		// TODO Auto-generated method stub
-		super.startActivityForResult(intent, requestCode);
-	}
-
-	@Override
-	public void startActivityForResult(Intent intent, int requestCode,
-			Bundle options) {
-		// TODO Auto-generated method stub
-		super.startActivityForResult(intent, requestCode, options);
 	}
 
 

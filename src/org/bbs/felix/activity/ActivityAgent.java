@@ -5,22 +5,28 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 
 /**
- *  keep method consistency with {@link Activity}
+ *  define method consistency with {@link Activity}.
+ *  <p>
+ *  {@link #mHostActivity} will be inited (!= null) before {@link #onCreate(Bundle)}, after
+ *  {@link #onDestroy()}, it will be un-inited ( == null).
  * @author luoqii
  *
+ * @see {@link BundleActivity}
  */
-public class ActivityAgent{
+public class ActivityAgent {
 	
 	protected FragmentActivity mHostActivity;
 
 	// life-cycle
 	protected void onCreate(Bundle savedInstanceState) {
 	}
-		protected void onResume() {
+	protected void onResume() {
 	}
 	protected void onPause() {
 	}
@@ -28,7 +34,12 @@ public class ActivityAgent{
 		mHostActivity = null;
 	}
 	public void setContentView(int layoutResID){
-		mHostActivity.setContentView(layoutResID);
+	}
+	public void onRestoreInstanceState(Bundle savedInstanceState) {
+	}
+	public void onPostCreate(Bundle savedInstanceState) {
+	}
+	public void onRestart() {
 	}
 	
 	// option menu.
@@ -83,6 +94,22 @@ public class ActivityAgent{
 	// activity result.
 	public void onActivityResult(int arg0, int arg1, Intent arg2) {
 		
+	}
+	public boolean dispatchKeyEvent(KeyEvent event) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	public boolean dispatchGenericMotionEvent(MotionEvent ev) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	public boolean dispatchTrackballEvent(MotionEvent ev) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	public boolean dispatchTouchEvent(MotionEvent ev) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 	
 	

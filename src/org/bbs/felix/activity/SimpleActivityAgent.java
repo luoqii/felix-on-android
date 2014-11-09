@@ -14,7 +14,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 /**
- *  keep method consistency with {@link Activity}
+ *  all method will call through {@link #mTargetActivity}, so, we can
+ *  "embed' an exist activity to {@link BundleActivity}.
  * @author luoqii
  *
  */
