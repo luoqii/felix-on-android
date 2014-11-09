@@ -6,11 +6,10 @@ import org.osgi.framework.ServiceRegistration;
 
 public class Activator implements BundleActivator {
 
-	private ServiceRegistration<?> mBundleList;
-
 	@Override
 	public void start(BundleContext context) throws Exception {
-		mBundleList = context.registerService(BundleList.class.getName(), new BundleList(), null);
+		context.registerService(BundleList.class.getName(), new BundleList(), null);
+		context.registerService(SimpleBundleList.class.getName(), new SimpleBundleList(), null);
 	}
 
 	@Override

@@ -12,5 +12,4 @@ dexify() {
     done
 }
 
-set -x
 dexify assets/felix/preloadbundle/*

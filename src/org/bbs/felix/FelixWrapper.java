@@ -9,6 +9,7 @@ import java.util.HashMap;
 import org.apache.felix.framework.FrameworkFactory;
 import org.apache.felix.framework.util.FelixConstants;
 import org.apache.felix.main.AutoProcessor;
+import org.bbs.felix.util.OsgiUtil;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
@@ -49,6 +50,7 @@ public class FelixWrapper{
 		
 		configMap.put(AutoProcessor.AUTO_DEPLOY_DIR_PROPERY, mBundleDir);
 		configMap.put(AutoProcessor.AUTO_DEPLOY_ACTION_PROPERY, 
+				AutoProcessor.AUTO_DEPLOY_UNINSTALL_VALUE + "," +
 				AutoProcessor.AUTO_DEPLOY_INSTALL_VALUE + "," + AutoProcessor.AUTO_DEPLOY_START_VALUE);
 		
 		configMap.put(FelixConstants.LOG_LEVEL_PROP, 4 + "");
@@ -66,11 +68,11 @@ public class FelixWrapper{
 			e.printStackTrace();
 		}
 		
-		Log.d(TAG, "OSGi framework running, state: " + mFramework.getState());
+		Log.d(TAG, "OSGi framework running, state: " + OsgiUtil.bundleState2Str(mFramework.getState()));
 		
 		Bundle[] bundles = mFramework.getBundleContext().getBundles();
 		for (Bundle b : bundles) {
-			Log.d(TAG, "b: " + b.getBundleId());
+			Log.d(TAG, "b: " + b.getBundleId() + " " + OsgiUtil.bundleState2Str(b.getState()));
 		}
 	}
 	
@@ -117,9 +119,9 @@ public class FelixWrapper{
 	
 	// copied from http://code.google.com/p/felix-on-android/
 	private static final String ANDROID_PACKAGES_FOR_EXPORT_EXTRA = 
-	        // ANDROID (here starts semicolon as separator -> Why?
 			"org.bbs.felix.activity," +
 			"org.bbs.felix.activity.ActivityAgent," +
+			"org.bangbang.song.felixonandroid," + 
 			//android
 	        "android, " + 
 	        "android.app," + 

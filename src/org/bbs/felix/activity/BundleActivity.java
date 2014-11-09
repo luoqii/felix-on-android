@@ -27,11 +27,15 @@ import android.content.res.XmlResourceParser;
 import android.graphics.Movie;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 /**
@@ -39,7 +43,10 @@ import android.widget.TextView;
  * @author luoqii
  *
  */
-public class BundleActivity extends Activity {
+public class BundleActivity extends 
+//Activity 
+FragmentActivity
+{
 	private static final String RES_PATH_APK_RES = "META-INF/MANIFEST.MF";
 
 	private static final String TAG = BundleActivity.class.getSimpleName();
@@ -52,7 +59,10 @@ public class BundleActivity extends Activity {
 	  *  type {@link String}
 	  */
 	public static final String EXTRA_SERVICE_FILTER = ".extra_service_filter_name";
-	public static final String DEFAULT_LAUNCHER_SERVICE_NAME = "org.bbs.bundlemgr.BundleList";
+	public static final String DEFAULT_LAUNCHER_SERVICE_NAME = 
+//			"org.bbs.bundlemgr.BundleList" 
+			"org.bbs.bundlemgr.SimpleBundleList"
+			;
 	public static final String DEFAULT_LAUNCHER_SERVICE_FILTER = "";
 	
 	ActivityAgent mActivateAgent;
@@ -66,7 +76,7 @@ public class BundleActivity extends Activity {
 		// call this as early as possible.
 		mActivateAgent = getActivator();
 		if (null != mActivateAgent) {
-			mActivateAgent.mActivity = this;
+			mActivateAgent.mHostActivity = this;
 			mActivateAgent.onCreate(savedInstanceState);
 		} else {
 			TextView t = new TextView(this);
@@ -102,11 +112,12 @@ public class BundleActivity extends Activity {
 			mSourceMerger = new ResourcesMerger(super.getResources(), bundleRes);
 			activator = (ActivityAgent) bundleContext.getService(s);
 		}
+		
 		return activator;
 	}
 	
 	private Resources getBundleResources(org.osgi.framework.Bundle bundle) {
-		File resApk = getFileStreamPath("" + bundle.getBundleId() + bundle.getVersion());
+		File resApk = getFileStreamPath("id" + bundle.getBundleId() + "_v" + bundle.getVersion());
 		if (!resApk.exists()) {
 			URL url = bundle.getResource(RES_PATH_APK_RES);
 			try {
@@ -117,8 +128,10 @@ public class BundleActivity extends Activity {
 				int read = -1;
 				while ((read = ins.read(buff)) != -1){
 					ous.write(buff, 0, read);
-					Log.d(TAG, "" + new String(buff, 0, read));
+//					Log.d(TAG, "" + new String(buff, 0, read));
 				}
+				ins.close();
+				ous.close();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -186,6 +199,39 @@ public class BundleActivity extends Activity {
 		super.onDestroy();
 		mActivateAgent.onDestroy();
 	}
+	
+	
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// TODO Auto-generated method stub
+		return mActivateAgent.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// TODO Auto-generated method stub
+		return mActivateAgent.onOptionsItemSelected(item);
+	}
+
+	
+
+
+	@Override
+	public void startActivityForResult(Intent intent, int requestCode) {
+		// TODO Auto-generated method stub
+		super.startActivityForResult(intent, requestCode);
+	}
+
+	@Override
+	public void startActivityForResult(Intent intent, int requestCode,
+			Bundle options) {
+		// TODO Auto-generated method stub
+		super.startActivityForResult(intent, requestCode, options);
+	}
+
+
+
 
 	public static class ResourcesMerger 
 	extends Resources 

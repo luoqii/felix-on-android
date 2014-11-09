@@ -1,25 +1,16 @@
 package org.bbs.felix.activity;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-
 import org.bangbang.song.felixonandroid.R;
-import org.bbs.felix.FelixWrapper;
+import org.bbs.felix.activity.BundleListActivity.BundleList;
 import org.bbs.felix.util.OsgiUtil;
 import org.osgi.framework.BundleException;
-import org.osgi.framework.launch.Framework;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -121,31 +112,4 @@ public class BundleListFragment extends Fragment {
 
 
 	
-	public static class BundleList {
-		private static BundleList sInstance;
-		
-		private org.osgi.framework.Bundle[] mBundles;
-		
-		public static BundleList getInstance(){
-			if (sInstance == null){
-				sInstance = new BundleList();
-			}
-			
-			sInstance.syncWithOsgi();
-			return sInstance;
-		}
-		
-		private BundleList(){
-		}
-		
-		public org.osgi.framework.Bundle[] getBundles(){
-			return mBundles;
-		}
-
-		private void syncWithOsgi() {
-			Framework f = FelixWrapper.getInstance(null).getFramework();
-			mBundles = f.getBundleContext().getBundles();
-		}
-	}
-
 }
