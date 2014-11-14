@@ -1,4 +1,4 @@
-package org.bbs.felix.activity;
+package org.bbs.felix.activity.bundlemanager;
 
 import org.bangbang.song.felixonandroid.R;
 

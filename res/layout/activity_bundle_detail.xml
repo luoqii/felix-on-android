@@ -10,7 +10,7 @@
 
 <fragment
     android:id="@+id/listFragment"
-    android:name="org.bbs.felix.activity.BundleDetailFragment"
+    android:name="org.bbs.felix.activity.bundlemanager.BundleDetailFragment"
     android:layout_width="match_parent"
     android:layout_height="fill_parent" />
 

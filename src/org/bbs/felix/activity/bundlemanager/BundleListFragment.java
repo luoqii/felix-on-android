@@ -1,7 +1,7 @@
-package org.bbs.felix.activity;
+package org.bbs.felix.activity.bundlemanager;
 
 import org.bangbang.song.felixonandroid.R;
-import org.bbs.felix.activity.BundleListActivity.BundleList;
+import org.bbs.felix.activity.bundlemanager.BundleListActivity.BundleList;
 import org.bbs.felix.util.OsgiUtil;
 import org.osgi.framework.BundleException;
 

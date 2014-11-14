@@ -1,4 +1,4 @@
-package org.bbs.felix.activity;
+package org.bbs.felix.activity.bundlemanager;
 
 import java.io.File;
 import java.io.FileInputStream;

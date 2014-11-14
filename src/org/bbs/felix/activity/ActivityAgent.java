@@ -2,6 +2,7 @@ package org.bbs.felix.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -54,6 +55,7 @@ public class ActivityAgent {
 	}
 
 	// start activity
+	// delegate to mHostActivity
 	public void startActivityFromFragment(Fragment fragment, Intent intent,
 			int requestCode) {
 		mHostActivity.startActivityFromFragment(fragment, intent, requestCode);
@@ -90,6 +92,12 @@ public class ActivityAgent {
 	public void startActivityForResult(Intent intent, int requestCode) {
 		mHostActivity.startActivityForResult(intent, requestCode);
 	}
+	
+	// res
+	public Resources getResources() {
+		return mHostActivity.getResources();
+	}
+	
 	
 	// activity result.
 	public void onActivityResult(int arg0, int arg1, Intent arg2) {

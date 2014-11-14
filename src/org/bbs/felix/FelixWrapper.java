@@ -121,11 +121,13 @@ public class FelixWrapper{
 	private static final String ANDROID_PACKAGES_FOR_EXPORT_EXTRA = 
 			"org.bbs.felix.activity," +
 			"org.bbs.felix.activity.ActivityAgent," +
-			"org.bangbang.song.felixonandroid," + 
+			"org.bbs.felix.activity.bundlemanager," + 
+			"org.bbs.felixonandroid," + 
 			//android
 	        "android, " + 
 	        "android.app," + 
 	        "android.content," + 
+	        "android.content.res," + 
 	        "android.database," + 
 	        "android.database.sqlite," + 
 	        "android.graphics, " + 

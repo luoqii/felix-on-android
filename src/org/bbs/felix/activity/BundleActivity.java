@@ -41,7 +41,7 @@ import android.view.MotionEvent;
 import android.widget.TextView;
 
 /**
- * if android call us call through to {@link #mActivateAgent};
+ * if android call us we call through to {@link #mActivateAgent};
  * otherwise call super or do ourself.
  * 
  * @author luoqii
@@ -52,7 +52,7 @@ public class BundleActivity extends
 //Activity 
 FragmentActivity
 {
-	private static final String RES_PATH_APK_RES = "META-INF/MANIFEST.MF";
+	private static final String RES_PATH_APK_RES = "res.apk";
 
 	private static final String TAG = BundleActivity.class.getSimpleName();
 	
@@ -93,9 +93,17 @@ FragmentActivity
 			TextView t = new TextView(this);
 			t.setText("no service avaiable: \n" + "serviceName: " + mServiceName
 						+ " serviceFilter: " + mServiceFilter);
+			throw new IllegalArgumentException("no ActivityAgent avaiable.");
 		}
 	}
 	
+	@Override
+	protected void onPostCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onPostCreate(savedInstanceState);
+		mActivateAgent.onPostCreate(savedInstanceState);
+	}
+
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -121,13 +129,6 @@ FragmentActivity
 		// TODO Auto-generated method stub
 		super.onRestoreInstanceState(savedInstanceState);
 		mActivateAgent.onRestoreInstanceState(savedInstanceState);
-	}
-
-	@Override
-	protected void onPostCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-		super.onPostCreate(savedInstanceState);
-		mActivateAgent.onPostCreate(savedInstanceState);
 	}
 
 	@Override
@@ -216,7 +217,7 @@ FragmentActivity
 			// FIXME update theme.
 			Resources bundleRes = getBundleResources(s.getBundle());
 			
-			mSourceMerger = new ResourcesMerger(super.getResources(), bundleRes);
+			mSourceMerger = new ResourcesMerger(bundleRes, super.getResources());
 			activator = (ActivityAgent) bundleContext.getService(s);
 		}
 		
@@ -225,6 +226,10 @@ FragmentActivity
 
 	private Resources getBundleResources(org.osgi.framework.Bundle bundle) {
 			File resApk = getFileStreamPath("id" + bundle.getBundleId() + "_v" + bundle.getVersion());
+			
+			//debug
+			resApk.delete();
+			
 			if (!resApk.exists()) {
 				URL url = bundle.getResource(RES_PATH_APK_RES);
 				try {
@@ -279,10 +284,18 @@ FragmentActivity
 
 
 
-
+	/**
+	 * <pre>
+	 * we assume that: 
+	 *  1) if first resource search failed, so second must be success, so 
+	 *  we only catch exception for first resource.
+	 * @author luoqii
+	 *
+	 */
 	public static class ResourcesMerger 
 	extends Resources 
 	{
+		private static final boolean DEBUG = true;
 		private Resources mFirst;
 		private Resources mSecond;
 
@@ -298,7 +311,9 @@ FragmentActivity
 			try {
 				return mFirst.getText(id);
 			} catch (NotFoundException e) {
-				e.printStackTrace();
+				if (DEBUG) {
+					e.printStackTrace();
+				}
 			}
 			
 			return mSecond.getText(id);
@@ -310,7 +325,9 @@ FragmentActivity
 			try {
 				return mFirst.getQuantityText(id, quantity);
 			} catch (NotFoundException e) {
-				e.printStackTrace();
+				if (DEBUG) {
+					e.printStackTrace();
+				}
 			}
 			return mSecond.getQuantityText(id, quantity);
 		}
@@ -320,7 +337,9 @@ FragmentActivity
 			try {
 				return mFirst.getString(id);
 			} catch (NotFoundException e) {
-				e.printStackTrace();
+				if (DEBUG) {
+					e.printStackTrace();
+				}
 			}
 			return mSecond.getString(id);
 		}
@@ -331,7 +350,9 @@ FragmentActivity
 			try {
 				return mFirst.getString(id, formatArgs);
 			} catch (NotFoundException e) {
-				e.printStackTrace();
+				if (DEBUG) {
+					e.printStackTrace();
+				}
 			}
 			return mSecond.getString(id, formatArgs);
 		}
@@ -342,7 +363,9 @@ FragmentActivity
 			try {
 				return mFirst.getQuantityString(id, quantity, formatArgs);
 			} catch (NotFoundException e) {
-				e.printStackTrace();
+				if (DEBUG) {
+					e.printStackTrace();
+				}
 			}
 			return mSecond.getQuantityString(id, quantity, formatArgs);
 		}
@@ -354,7 +377,9 @@ FragmentActivity
 			try {
 				return mFirst.getQuantityString(id, quantity);
 			} catch (NotFoundException e) {
-				e.printStackTrace();
+				if (DEBUG) {
+					e.printStackTrace();
+				}
 			}
 			return mSecond.getQuantityString(id, quantity);
 		}
@@ -365,7 +390,9 @@ FragmentActivity
 			try {
 				return mFirst.getText(id, def);
 			} catch (NotFoundException e) {
-				e.printStackTrace();
+				if (DEBUG) {
+					e.printStackTrace();
+				}
 			}
 			return mSecond.getText(id, def);
 		}
@@ -376,7 +403,9 @@ FragmentActivity
 			try {
 				return mFirst.getTextArray(id);
 			} catch (NotFoundException e) {
-				e.printStackTrace();
+				if (DEBUG) {
+					e.printStackTrace();
+				}
 			}
 			return mSecond.getTextArray(id);
 		}
@@ -387,7 +416,9 @@ FragmentActivity
 			try {
 				return mFirst.getStringArray(id);
 			} catch (NotFoundException e) {
-				e.printStackTrace();
+				if (DEBUG) {
+					e.printStackTrace();
+				}
 			}
 			return mSecond.getStringArray(id);
 		}
@@ -398,7 +429,9 @@ FragmentActivity
 			try {
 				return mFirst.getIntArray(id);
 			} catch (NotFoundException e) {
-				e.printStackTrace();
+				if (DEBUG) {
+					e.printStackTrace();
+				}
 			}
 			return mSecond.getIntArray(id);
 		}
@@ -409,7 +442,9 @@ FragmentActivity
 			try {
 				return mFirst.obtainTypedArray(id);
 			} catch (NotFoundException e) {
-				e.printStackTrace();
+				if (DEBUG) {
+					e.printStackTrace();
+				}
 			}
 			return mSecond.obtainTypedArray(id);
 		}
@@ -420,7 +455,9 @@ FragmentActivity
 			try {
 				return mFirst.getDimension(id);
 			} catch (NotFoundException e) {
-				e.printStackTrace();
+				if (DEBUG) {
+					e.printStackTrace();
+				}
 			}
 			return mSecond.getDimension(id);
 		}
@@ -431,7 +468,9 @@ FragmentActivity
 			try {
 				return mFirst.getDimensionPixelOffset(id);
 			} catch (NotFoundException e) {
-				e.printStackTrace();
+				if (DEBUG) {
+					e.printStackTrace();
+				}
 			}
 			return mSecond.getDimensionPixelOffset(id);
 		}
@@ -442,7 +481,9 @@ FragmentActivity
 			try {
 				return mFirst.getDimensionPixelSize(id);
 			} catch (NotFoundException e) {
-				e.printStackTrace();
+				if (DEBUG) {
+					e.printStackTrace();
+				}
 			}
 			return mSecond.getDimensionPixelSize(id);
 		}
@@ -453,7 +494,9 @@ FragmentActivity
 			try {
 				return mFirst.getFraction(id, base, pbase);
 			} catch (NotFoundException e) {
-				e.printStackTrace();
+				if (DEBUG) {
+					e.printStackTrace();
+				}
 			}
 			return mSecond.getFraction(id, base, pbase);
 		}
@@ -464,7 +507,9 @@ FragmentActivity
 			try {
 				return mFirst.getDrawable(id);
 			} catch (NotFoundException e) {
-				e.printStackTrace();
+				if (DEBUG) {
+					e.printStackTrace();
+				}
 			}
 			return mSecond.getDrawable(id);
 		}
@@ -476,7 +521,9 @@ FragmentActivity
 			try {
 				return mFirst.getDrawableForDensity(id, density);
 			} catch (NotFoundException e) {
-				e.printStackTrace();
+				if (DEBUG) {
+					e.printStackTrace();
+				}
 			}
 			return mSecond.getDrawableForDensity(id, density);
 		}
@@ -487,7 +534,9 @@ FragmentActivity
 			try {
 				return mFirst.getMovie(id);
 			} catch (NotFoundException e) {
-				e.printStackTrace();
+				if (DEBUG) {
+					e.printStackTrace();
+				}
 			}
 			return mSecond.getMovie(id);
 		}
@@ -498,7 +547,9 @@ FragmentActivity
 			try {
 				return mFirst.getColor(id);
 			} catch (NotFoundException e) {
-				e.printStackTrace();
+				if (DEBUG) {
+					e.printStackTrace();
+				}
 			}
 			return mSecond.getColor(id);
 		}
@@ -510,7 +561,9 @@ FragmentActivity
 			try {
 				return mFirst.getColorStateList(id);
 			} catch (NotFoundException e) {
-				e.printStackTrace();
+				if (DEBUG) {
+					e.printStackTrace();
+				}
 			}
 			return mSecond.getColorStateList(id);
 		}
@@ -521,7 +574,9 @@ FragmentActivity
 			try {
 				return mFirst.getBoolean(id);
 			} catch (NotFoundException e) {
-				e.printStackTrace();
+				if (DEBUG) {
+					e.printStackTrace();
+				}
 			}
 			return mSecond.getBoolean(id);
 		}
@@ -532,7 +587,9 @@ FragmentActivity
 			try {
 				return mFirst.getInteger(id);
 			} catch (NotFoundException e) {
-				e.printStackTrace();
+				if (DEBUG) {
+					e.printStackTrace();
+				}
 			}
 			return mSecond.getInteger(id);
 		}
@@ -543,7 +600,9 @@ FragmentActivity
 			try {
 				return mFirst.getLayout(id);
 			} catch (NotFoundException e) {
-				e.printStackTrace();
+				if (DEBUG) {
+					e.printStackTrace();
+				}
 			}
 			return mSecond.getLayout(id);
 		}
@@ -554,7 +613,9 @@ FragmentActivity
 			try {
 				return mFirst.getAnimation(id);
 			} catch (NotFoundException e) {
-				e.printStackTrace();
+				if (DEBUG) {
+					e.printStackTrace();
+				}
 			}
 			return mSecond.getAnimation(id);
 		}
@@ -565,7 +626,9 @@ FragmentActivity
 			try {
 				return mFirst.getXml(id);
 			} catch (NotFoundException e) {
-				e.printStackTrace();
+				if (DEBUG) {
+					e.printStackTrace();
+				}
 			}
 			return mSecond.getXml(id);
 		}
@@ -576,7 +639,9 @@ FragmentActivity
 			try {
 				return mFirst.openRawResource(id);
 			} catch (NotFoundException e) {
-				e.printStackTrace();
+				if (DEBUG) {
+					e.printStackTrace();
+				}
 			}
 			return mSecond.openRawResource(id);
 		}
@@ -588,7 +653,9 @@ FragmentActivity
 			try {
 				return mFirst.openRawResource(id, value);
 			} catch (NotFoundException e) {
-				e.printStackTrace();
+				if (DEBUG) {
+					e.printStackTrace();
+				}
 			}
 			return mSecond.openRawResource(id, value);
 		}
@@ -600,7 +667,9 @@ FragmentActivity
 			try {
 				return mFirst.openRawResourceFd(id);
 			} catch (NotFoundException e) {
-				e.printStackTrace();
+				if (DEBUG) {
+					e.printStackTrace();
+				}
 			}
 			return mSecond.openRawResourceFd(id);
 		}
@@ -613,7 +682,9 @@ FragmentActivity
 				 mFirst.getValue(id, outValue, resolveRefs);
 				 return;
 			} catch (NotFoundException e) {
-				e.printStackTrace();
+				if (DEBUG) {
+					e.printStackTrace();
+				}
 			}
 			mSecond.getValue(id, outValue, resolveRefs);
 		}
@@ -627,7 +698,9 @@ FragmentActivity
 				 mFirst.getValueForDensity(id, density, outValue, resolveRefs);
 				 return;
 			} catch (NotFoundException e) {
-				e.printStackTrace();
+				if (DEBUG) {
+					e.printStackTrace();
+				}
 			}
 			mSecond.getValueForDensity(id, density, outValue, resolveRefs);
 		}
@@ -640,7 +713,9 @@ FragmentActivity
 				 mFirst.getValue(name, outValue, resolveRefs);
 				 return;
 			} catch (NotFoundException e) {
-				e.printStackTrace();
+				if (DEBUG) {
+					e.printStackTrace();
+				}
 			}
 			mSecond.getValue(name, outValue, resolveRefs);
 		}
@@ -651,7 +726,9 @@ FragmentActivity
 			try {
 				return mFirst.obtainAttributes(set, attrs);
 			} catch (NotFoundException e) {
-				e.printStackTrace();
+				if (DEBUG) {
+					e.printStackTrace();
+				}
 			}
 			return mSecond.obtainAttributes(set, attrs);
 		}
@@ -667,7 +744,9 @@ FragmentActivity
 				 }
 				 return;
 			} catch (NotFoundException e) {
-				e.printStackTrace();
+				if (DEBUG) {
+					e.printStackTrace();
+				}
 			}
 			// this will be called in Constructor,so .
 			if (null != mSecond) {
@@ -681,7 +760,9 @@ FragmentActivity
 			try {
 				return mFirst.getDisplayMetrics();
 			} catch (NotFoundException e) {
-				e.printStackTrace();
+				if (DEBUG) {
+					e.printStackTrace();
+				}
 			}
 			return mSecond.getDisplayMetrics();
 		}
@@ -692,7 +773,9 @@ FragmentActivity
 			try {
 				return mFirst.getConfiguration();
 			} catch (NotFoundException e) {
-				e.printStackTrace();
+				if (DEBUG) {
+					e.printStackTrace();
+				}
 			}
 			return mSecond.getConfiguration();
 		}
@@ -703,7 +786,9 @@ FragmentActivity
 			try {
 				return mFirst.getIdentifier(name, defType, defPackage);
 			} catch (NotFoundException e) {
-				e.printStackTrace();
+				if (DEBUG) {
+					e.printStackTrace();
+				}
 			}
 			return mSecond.getIdentifier(name, defType, defPackage);
 		}
@@ -714,7 +799,9 @@ FragmentActivity
 			try {
 				return mFirst.getResourceName(resid);
 			} catch (NotFoundException e) {
-				e.printStackTrace();
+				if (DEBUG) {
+					e.printStackTrace();
+				}
 			}
 			return mSecond.getResourceName(resid);
 		}
@@ -726,7 +813,9 @@ FragmentActivity
 			try {
 				return mFirst.getResourcePackageName(resid);
 			} catch (NotFoundException e) {
-				e.printStackTrace();
+				if (DEBUG) {
+					e.printStackTrace();
+				}
 			}
 			return mSecond.getResourcePackageName(resid);
 		}
@@ -737,7 +826,9 @@ FragmentActivity
 			try {
 				return mFirst.getResourceTypeName(resid);
 			} catch (NotFoundException e) {
-				e.printStackTrace();
+				if (DEBUG) {
+					e.printStackTrace();
+				}
 			}
 			return mSecond.getResourceTypeName(resid);
 		}
@@ -748,7 +839,9 @@ FragmentActivity
 			try {
 				return mFirst.getResourceEntryName(resid);
 			} catch (NotFoundException e) {
-				e.printStackTrace();
+				if (DEBUG) {
+					e.printStackTrace();
+				}
 			}
 			return mSecond.getResourceEntryName(resid);
 		}
@@ -761,9 +854,13 @@ FragmentActivity
 				mFirst.parseBundleExtras(parser, outBundle);
 				return;
 			} catch (XmlPullParserException e) {
-				e.printStackTrace();
+				if (DEBUG) {
+					e.printStackTrace();
+				}
 			} catch (IOException e) {
-				e.printStackTrace();
+				if (DEBUG) {
+					e.printStackTrace();
+				}
 			}
 			mSecond.parseBundleExtras(parser, outBundle);
 		}
@@ -776,7 +873,9 @@ FragmentActivity
 				mFirst.parseBundleExtra(tagName, attrs, outBundle);
 				return;
 			} catch (XmlPullParserException e) {
-				e.printStackTrace();
+				if (DEBUG) {
+					e.printStackTrace();
+				}
 			}
 			mSecond.parseBundleExtra(tagName, attrs, outBundle);
 		}
