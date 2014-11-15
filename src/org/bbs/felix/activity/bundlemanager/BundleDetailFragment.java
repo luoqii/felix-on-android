@@ -1,7 +1,9 @@
 package org.bbs.felix.activity.bundlemanager;
 
-import org.bangbang.song.felixonandroid.R;
+import java.util.Date;
+
 import org.bbs.felix.util.OsgiUtil;
+import org.bbs.felixonandroid.R;
 import org.osgi.framework.BundleException;
 
 import android.os.Bundle;
@@ -55,6 +57,7 @@ public class BundleDetailFragment extends Fragment {
 				 + "version: " + b.getVersion() + "\n"
 				 + "location: " + b.getLocation() + "\n"
 				 + "state: " + OsgiUtil.bundleState2Str(b.getState()) + "\n"
+				 + "lastModified: " + new Date(b.getLastModified()) + "\n"
 				 + "headers: \n" + getHeader(b) + "\n"
 				;
 		return str;

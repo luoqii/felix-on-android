@@ -1,8 +1,8 @@
 package org.bbs.bundlemgr;
 
 import org.bbs.bundlemgr.res.R;
-import org.bbs.felix.activity.SimpleActivityAgent;
 import org.bbs.felix.activity.bundlemanager.BundleListActivity;
+import org.bbs.osgi.activity.SimpleActivityAgent;
 
 import android.app.Activity;
 import android.util.Log;

@@ -1,4 +1,4 @@
-package org.bbs.felix.activity;
+package org.bbs.osgi.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -6,16 +6,22 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup.LayoutParams;
 
 /**
  *  define method consistency with {@link Activity}.
  *  <p>
  *  {@link #mHostActivity} will be inited (!= null) before {@link #onCreate(Bundle)}, after
  *  {@link #onDestroy()}, it will be un-inited ( == null).
+ *  <p>
+ *  when add new method, keep in order.
  * @author luoqii
  *
  * @see {@link BundleActivity}
@@ -34,8 +40,6 @@ public class ActivityAgent {
 	protected void onDestroy() {
 		mHostActivity = null;
 	}
-	public void setContentView(int layoutResID){
-	}
 	public void onRestoreInstanceState(Bundle savedInstanceState) {
 	}
 	public void onPostCreate(Bundle savedInstanceState) {
@@ -43,7 +47,27 @@ public class ActivityAgent {
 	public void onRestart() {
 	}
 	
-	// option menu.
+	// content view
+	public void setContentView(int layoutResID) {
+		mHostActivity.setContentView(layoutResID);
+	}
+	public void setContentView(View view) {
+		mHostActivity.setContentView(view);
+	}
+	public void setContentView(View view, LayoutParams params) {
+		mHostActivity.setContentView(view, params);
+	}
+	public void setTitle(int titleId) {
+		mHostActivity.setTitle(titleId);
+	}
+	public void setTitle(CharSequence title) {
+		mHostActivity.setTitle(title);
+	}	
+		
+	// menu.
+//	public boolean onPreparePanel(int arg0, View arg1, Menu arg2) {
+//		return false;
+//	}
 	public boolean onCreateOptionsMenu(Menu menu){
 		return false;
 	}
@@ -51,11 +75,10 @@ public class ActivityAgent {
         return false;
 	}
 	public boolean onPrepareOptionsMenu(Menu menu){
-		return mHostActivity.onPrepareOptionsMenu(menu);
+		return false;
 	}
 
 	// start activity
-	// delegate to mHostActivity
 	public void startActivityFromFragment(Fragment fragment, Intent intent,
 			int requestCode) {
 		mHostActivity.startActivityFromFragment(fragment, intent, requestCode);
@@ -93,16 +116,14 @@ public class ActivityAgent {
 		mHostActivity.startActivityForResult(intent, requestCode);
 	}
 	
+	// activity result.
+	public void onActivityResult(int arg0, int arg1, Intent arg2) {
+	}
+	
 	// res
 	public Resources getResources() {
 		return mHostActivity.getResources();
-	}
-	
-	
-	// activity result.
-	public void onActivityResult(int arg0, int arg1, Intent arg2) {
-		
-	}
+	}	
 	public boolean dispatchKeyEvent(KeyEvent event) {
 		// TODO Auto-generated method stub
 		return false;
@@ -118,6 +139,16 @@ public class ActivityAgent {
 	public boolean dispatchTouchEvent(MotionEvent ev) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	public void onCreateContextMenu(ContextMenu menu, View v,
+			ContextMenuInfo menuInfo) {
+		
+	}
+	public boolean onContextItemSelected(MenuItem item) {
+		return false;
+	}
+	public void onContextMenuClosed(Menu menu) {
+		
 	}
 	
 	

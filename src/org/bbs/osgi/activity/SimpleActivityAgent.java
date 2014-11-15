@@ -1,4 +1,4 @@
-package org.bbs.felix.activity;
+package org.bbs.osgi.activity;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -10,8 +10,11 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 /**
  *  all method will call through {@link #mTargetActivity}, so, we can
@@ -43,15 +46,34 @@ public abstract class SimpleActivityAgent extends ActivityAgent {
 		super.onDestroy();
 	}
 	
-	public boolean onCreateOptionsMenu(Menu menu) {
-		return ActivityUtil.onCreateOptionsMenu(mTargetActivity, menu);
-	}
 	
+	public boolean onPreparePanel(int arg0, View arg1, Menu arg2) {
+		return mTargetActivity.onPreparePanel(arg0, arg1, arg2);
+	}
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		return mTargetActivity.onPrepareOptionsMenu(menu);
+	}
+	public boolean onCreateOptionsMenu(Menu menu) {
+		return mTargetActivity.onCreateOptionsMenu(menu);
+	}
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		return ActivityUtil.onOptionsItemSelected(mTargetActivity, item);
+		return mTargetActivity.onOptionsItemSelected(item);
 	}
-	
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v,
+			ContextMenuInfo menuInfo) {
+		mTargetActivity.onCreateContextMenu(menu, v, menuInfo);
+	}
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		return mTargetActivity.onContextItemSelected(item);
+	}
+	@Override
+	public void onContextMenuClosed(Menu menu) {
+		mTargetActivity.onContextMenuClosed(menu);
+	}
+
 	public void onActivityResult(int arg0, int arg1, Intent arg2) {
 		ActivityUtil.onActivityResult(mTargetActivity, arg0, arg1, arg2);
 	}
@@ -77,6 +99,75 @@ public abstract class SimpleActivityAgent extends ActivityAgent {
 			}
 		}
 		
+
+		public static void onContextMenuClosed(Activity activity,
+				Menu menu) {
+			try {
+				Method m = Activity.class.getDeclaredMethod("onContextMenuClosed", new Class[]{Menu.class});
+				m.setAccessible(true);
+				m.invoke(activity, new Object[]{menu});
+			} catch (NoSuchMethodException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalArgumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
+			
+		}
+
+
+		public static boolean onContextItemSelected(Activity activity,
+				MenuItem item) {
+			try {
+				Method m = Activity.class.getDeclaredMethod("onContextItemSelected", new Class[]{MenuItem.class});
+				m.setAccessible(true);
+				return (Boolean) m.invoke(activity, new Object[]{item});
+			} catch (NoSuchMethodException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalArgumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
+			return false;
+		}
+
+
+		public static void onCreateContextMenu(Activity activity,
+				ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+			try {
+				Method m = Activity.class.getDeclaredMethod("onCreateContextMenu", new Class[]{ContextMenu.class, View.class, ContextMenuInfo.class});
+				m.setAccessible(true);
+				m.invoke(activity, new Object[]{menu, v, menuInfo});
+			} catch (NoSuchMethodException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalArgumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
+			
+		}
+
 
 		public static void onActivityResult(Activity activity, int arg0,
 				int arg1, Intent arg2) {

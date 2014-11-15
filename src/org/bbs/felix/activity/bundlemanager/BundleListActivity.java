@@ -4,14 +4,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
-import org.bangbang.song.felixonandroid.R;
 import org.bbs.felix.FelixWrapper;
+import org.bbs.felixonandroid.R;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.launch.Framework;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;

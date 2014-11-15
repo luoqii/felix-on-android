@@ -1,10 +1,9 @@
 package org.bbs.felix.activity.bundlemanager;
 
-import org.bangbang.song.felixonandroid.R;
+import org.bbs.felixonandroid.R;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.view.Menu;
 
 public class BundleDetailActivity extends FragmentActivity {
 	public static final String EXTRA_BUNDLE_ID = "extra.bundle.id";

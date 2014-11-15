@@ -1,7 +1,7 @@
 package org.bbs.felix.activity.bundlemanager;
 
-import org.bangbang.song.felixonandroid.R;
 import org.bbs.felix.FelixWrapper;
+import org.bbs.felixonandroid.R;
 import org.osgi.framework.ServiceReference;
 
 import android.app.Activity;

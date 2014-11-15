@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.bangbang.song.felixonandroid"
+    package="org.bbs.felixonandroid"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -44,7 +44,7 @@
         </activity>
         
         <activity
-            android:name="org.bbs.felix.activity.BundleActivity"  
+            android:name="org.bbs.osgi.activity.BundleActivity"  
             android:label="BandleInBundle" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

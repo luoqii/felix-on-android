@@ -50,8 +50,10 @@ public class FelixWrapper{
 		
 		configMap.put(AutoProcessor.AUTO_DEPLOY_DIR_PROPERY, mBundleDir);
 		configMap.put(AutoProcessor.AUTO_DEPLOY_ACTION_PROPERY, 
-				AutoProcessor.AUTO_DEPLOY_UNINSTALL_VALUE + "," +
-				AutoProcessor.AUTO_DEPLOY_INSTALL_VALUE + "," + AutoProcessor.AUTO_DEPLOY_START_VALUE);
+						AutoProcessor.AUTO_DEPLOY_UNINSTALL_VALUE + "," +
+						AutoProcessor.AUTO_DEPLOY_INSTALL_VALUE + "," + 
+						AutoProcessor.AUTO_DEPLOY_START_VALUE
+						);
 		
 		configMap.put(FelixConstants.LOG_LEVEL_PROP, 4 + "");
 		
@@ -60,6 +62,14 @@ public class FelixWrapper{
 		Log.d(TAG, "init & start osgi." );
 		try {
 			mFramework.init();
+			Bundle[] bundles = mFramework.getBundleContext().getBundles();
+			
+			// for re-deploy bundle.
+			for (Bundle b : bundles) {
+				if (0 != b.getBundleId()) {
+					b.uninstall();
+				}
+			}
 			AutoProcessor.process(configMap, mFramework.getBundleContext());
 			
 			mFramework.start();
@@ -119,7 +129,7 @@ public class FelixWrapper{
 	
 	// copied from http://code.google.com/p/felix-on-android/
 	private static final String ANDROID_PACKAGES_FOR_EXPORT_EXTRA = 
-			"org.bbs.felix.activity," +
+			"org.bbs.osgi.activity," +
 			"org.bbs.felix.activity.ActivityAgent," +
 			"org.bbs.felix.activity.bundlemanager," + 
 			"org.bbs.felixonandroid," + 
@@ -154,6 +164,10 @@ public class FelixWrapper{
 	        "android.view.animation, " + 
 	        "android.webkit, " + 
 	        "android.widget, " + 
+	        
+	        // support v4
+	        "android.support.v4.app," + 
+	        
 	        // JAVAx
 	        "javax.crypto; " + 
 	        "javax.crypto.interfaces; " + 
