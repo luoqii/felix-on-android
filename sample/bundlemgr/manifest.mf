@@ -4,4 +4,4 @@ Bundle-Vendor: Apache Felix
 Bundle-Version: 1.0.0
 Bundle-Activator: org.bbs.bundlemgr.Activator
 Export-Package: org.bbs.bundlemgr
-Import-Package: android.support.v4.app,android.content.res,org.osgi.framework,org.bbs.osgi.activity.bundlemanager,org.bbs.bundlemgr,org.bbs.felixonandroid,android.util,android.os,android.content,android.app,android.view,android.widget,org.bbs.felix.activity
+Import-Package: android.support.v4.app,android.content.res,org.osgi.framework,org.bbs.felix.activity.bundlemanager,org.bbs.bundlemgr,org.bbs.felixonandroid,android.util,android.os,android.content,android.app,android.view,android.widget,org.bbs.osgi.activity
