@@ -72,12 +72,12 @@ public class BundleListFragment extends Fragment {
 				org.osgi.framework.Bundle b = (org.osgi.framework.Bundle) parent.getAdapter().getItem(position);
 				Intent detail = new Intent(getActivity(), BundleDetailActivity.class);
 				detail.putExtra(BundleDetailActivity.EXTRA_BUNDLE_ID, b.getBundleId());
-//				startActivity(detail);
+				startActivity(detail);
 				
 				Intent bundleIntent = new Intent(getActivity(), BundleActivity.class);
 				bundleIntent.putExtra(BundleActivity.EXTRA_SERVICE_NAME, "org.bbs.bundlemgr.BundleList");
 				bundleIntent.putExtra(BundleActivity.EXTRA_SERVICE_NAME, "org.bbs.bundlemgr.SimpleBundleList");
-				startActivity(bundleIntent);
+//				startActivity(bundleIntent);
 			}
 		});
 
