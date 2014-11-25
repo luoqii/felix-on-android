@@ -99,6 +99,9 @@ public class FelixWrapper{
 				Log.d(TAG, "prepare bundle: " + aFile);
 				InputStream in = assetsM.open(assertFile);
 				String bFile = mBundleDir + "/" + aFile;
+				if (aFile.endsWith("apk")) {
+					bFile = bFile + ".jar";
+				}
 				OutputStream out = 
 //						context.openFileOutput(mBundleDir + "/" + aFile, 0);
 						

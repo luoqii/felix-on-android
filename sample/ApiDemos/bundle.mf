@@ -1,0 +1,16 @@
+Bundle-Name: api demo by osgi
+Bundle-Description: A bundle that wrap android api demo
+Bundle-Vendor: bysong
+Bundle-Version: 1.0.0
+Bundle-Activator: com.example.android.apis.Activator
+Export-Package: com.example.android.apis
+Import-Package: com.example.android.apis,
+ android.support.v4.app,
+ android.content.res,
+ android.os,
+ android.content,
+ android.app,android.view,
+ android.widget,
+ android.util,
+ org.osgi.framework,
+ org.bbs.osgi.activity

@@ -54,9 +54,12 @@ FragmentActivity
 	public static final String EXTRA_SERVICE_FILTER = ".extra_service_filter_name";
 	public static final String DEFAULT_LAUNCHER_SERVICE_NAME = 
 //			"org.bbs.bundlemgr.BundleList" 
-			"org.bbs.bundlemgr.SimpleBundleList"
+//			"org.bbs.bundlemgr.SimpleBundleList"
+			"com.example.android.apis.ApiDemos"
 			;
 	public static final String DEFAULT_LAUNCHER_SERVICE_FILTER = "";
+	
+	public static final String EXTRA_EMBEDED_ACTIVITY_CLASS_NAME = ".extra_embed_activity_class_name";
 	
 	ActivityAgent mActivityAgent;
 	private String mServiceName;
@@ -103,7 +106,7 @@ FragmentActivity
 
 	private void initActivityAgent() {
 		if (null == mActivityAgent) {
-			mActivityAgent = getActivator();
+			mActivityAgent = getActivityAgent();
 		}
 	}
 		@Override
@@ -207,8 +210,8 @@ FragmentActivity
 //	}
 
 	// private method.
-	private ActivityAgent getActivator() {
-		ActivityAgent activator = null;
+	private ActivityAgent getActivityAgent() {
+		ActivityAgent agent = null;
 		Intent intent = getIntent();
 		mServiceName =  intent.getStringExtra(EXTRA_SERVICE_NAME);
 		if (TextUtils.isEmpty(mServiceName)) {
@@ -235,10 +238,10 @@ FragmentActivity
 				mLazyContext.bundleResReady(mSourceMerger);
 			}
 			
-			activator = (ActivityAgent) bundleContext.getService(s);
+			agent = (ActivityAgent) bundleContext.getService(s);
 		}
 		
-		return activator;
+		return agent;
 	}
 
 	private Resources getBundleResources(org.osgi.framework.Bundle bundle) {
