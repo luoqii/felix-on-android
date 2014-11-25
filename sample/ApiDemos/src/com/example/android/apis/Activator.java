@@ -15,7 +15,7 @@ public class Activator implements BundleActivator {
 //		context.registerService(SimpleBundleList.class.getName(), new SimpleBundleList(), null);
 //		registerActivity(context, ApiDemos.class.getName());
 	}
-
+	
 	@Override
 	public void stop(BundleContext context) throws Exception {
 	}

@@ -1,0 +1,1 @@
+file in this folder will auto-extract to sdcard (if has).
