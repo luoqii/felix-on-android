@@ -19,6 +19,7 @@ import android.content.Intent;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.content.res.Resources.Theme;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
@@ -31,6 +32,9 @@ import android.widget.TextView;
 /**
  * if android call us we call through to {@link #mActivityAgent};
  * otherwise call super or do ourself.
+ * 
+ * <p>
+ * when add new function, keep it in section, in order.
  * 
  * @author luoqii
  *
@@ -61,6 +65,8 @@ FragmentActivity
 	public static final String DEFAULT_LAUNCHER_SERVICE_FILTER = "";
 	
 	public static final String EXTRA_EMBEDED_ACTIVITY_CLASS_NAME = ".extra_embed_activity_class_name";
+
+	private static final boolean FORCE_CLOSE = true;
 	
 	ActivityAgent mActivityAgent;
 	private String mServiceName;
@@ -79,6 +85,11 @@ FragmentActivity
 	public void setTheme(int resid) {
 		super.setTheme(resid);
 	}
+	
+	@Override
+	public Theme getTheme() {
+		return super.getTheme();
+	}
 
 	public Resources getResources() {
 		// this will call before onCreate().
@@ -86,7 +97,7 @@ FragmentActivity
 //		return super.getResources();
 		return mLazyContext.getResources();
 //		return mSourceMerger == null ? super.getResources() : mSourceMerger;
-	}
+	}	
 
 	// life-cycle
 	@Override
@@ -101,16 +112,18 @@ FragmentActivity
 			TextView t = new TextView(this);
 			t.setText("no service avaiable: \n" + "serviceName: " + mServiceName
 						+ " serviceFilter: " + mServiceFilter);
-			throw new IllegalArgumentException("no ActivityAgent avaiable.");
+			setContentView(t);
+			if (FORCE_CLOSE) {
+				throw new IllegalArgumentException("no ActivityAgent avaiable.");
+			}
 		}
 	}
-
 	private void initActivityAgent() {
 		if (null == mActivityAgent) {
 			mActivityAgent = getActivityAgent();
 		}
 	}
-		@Override
+	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
 		mActivityAgent.onPostCreate(savedInstanceState);

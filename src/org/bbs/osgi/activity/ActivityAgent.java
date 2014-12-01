@@ -20,8 +20,9 @@ import android.view.ViewGroup.LayoutParams;
  *  <p>
  *  {@link #mHostActivity} will be inited (!= null) before {@link #onCreate(Bundle)}, after
  *  {@link #onDestroy()}, it will be un-inited ( == null).
+ *  
  *  <p>
- *  when add new method, keep in order.
+ * when add new function, keep it in section, in order.
  * @author luoqii
  *
  * @see {@link BundleActivity}

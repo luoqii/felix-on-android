@@ -10,6 +10,8 @@ import org.osgi.framework.ServiceRegistration;
 
 import android.app.Activity;
 
+import com.example.android.apis.view.AutoComplete1;
+
 public class Activator implements BundleActivator {
 
 	@Override
@@ -49,7 +51,7 @@ public class Activator implements BundleActivator {
 		@Override
 		public Activity getTargetActivity() {
 			// TODO Auto-generated method stub
-			return new ApiDemos();
+			return new AutoComplete1();
 		}
 		
 	}

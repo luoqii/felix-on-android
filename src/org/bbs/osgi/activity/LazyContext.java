@@ -4,6 +4,11 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.res.Resources;
 
+/**
+ * when bundle resource is ready, return this, otherwise, return normally.
+ * @author bysong
+ *
+ */
 class LazyContext extends ContextWrapper {
 
 	private Resources mResource;

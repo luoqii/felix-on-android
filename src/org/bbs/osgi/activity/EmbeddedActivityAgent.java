@@ -9,9 +9,12 @@ import android.app.Application;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +23,8 @@ import android.view.View;
  *  all method will call through {@link #mTargetActivity}, so, we can
  *  "embed' an exist activity to {@link BundleActivity}.
  * @author luoqii
+ * 
+ * @see {@link BundleActivity}
  *
  */
 public abstract class EmbeddedActivityAgent extends ActivityAgent {
@@ -31,19 +36,25 @@ public abstract class EmbeddedActivityAgent extends ActivityAgent {
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		mTargetActivity = getTargetActivity();
+		
+		// prepare new activity.
+//		ActivityUtil.attach(mHostActivity, mTargetActivity);
 		ActivityUtil.attachBaseContext(mTargetActivity, mHostActivity.getApplication());
 		ActivityUtil.copyFields(mHostActivity, mTargetActivity);
+		
 		ActivityUtil.onCreate(mTargetActivity, savedInstanceState);
 	}
 	
 	protected void onResume() {
+		ActivityUtil.onResume(mTargetActivity);
 	}
 
 	protected void onPause() {
+		ActivityUtil.onPause(mTargetActivity);
 	}
-
+	
 	protected void onDestroy() {
-		super.onDestroy();
+		ActivityUtil.onDestroy(mTargetActivity);
 	}
 	
 	
@@ -78,10 +89,96 @@ public abstract class EmbeddedActivityAgent extends ActivityAgent {
 		ActivityUtil.onActivityResult(mTargetActivity, arg0, arg1, arg2);
 	}
 	
-	static class ActivityUtil {
+	/**
+	 *  keep function name consistency with {@link Activity}
+	 *  
+	 * @author bysong
+	 *
+	 */
+	public static class ActivityUtil {
 		public static void onCreate(Activity activity, Bundle savedInstanceState){
 			try {
 				Method m = Activity.class.getDeclaredMethod("onCreate", new Class[]{Bundle.class});
+				m.setAccessible(true);
+				m.invoke(activity, new Object[]{savedInstanceState});
+			} catch (NoSuchMethodException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalArgumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		public static void onResume(Activity activity){
+			try {
+				Method m = Activity.class.getDeclaredMethod("onResume", (Class[]) null);
+				m.setAccessible(true);
+				m.invoke(activity, (Object[]) null);
+			} catch (NoSuchMethodException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalArgumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		public static void onPause(Activity activity){
+			try {
+				Method m = Activity.class.getDeclaredMethod("onPause", (Class[]) null);
+				m.setAccessible(true);
+				m.invoke(activity, (Object[]) null);
+			} catch (NoSuchMethodException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalArgumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		public static void onDestroy(Activity activity){
+			try {
+				Method m = Activity.class.getDeclaredMethod("onResume", (Class[])null);
+				m.setAccessible(true);
+				m.invoke(activity, (Object[])null);
+			} catch (NoSuchMethodException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalArgumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		public static void onResume(Activity activity, Bundle savedInstanceState){
+			try {
+				Method m = Activity.class.getDeclaredMethod("onResume", new Class[]{Bundle.class});
 				m.setAccessible(true);
 				m.invoke(activity, new Object[]{savedInstanceState});
 			} catch (NoSuchMethodException e) {
@@ -231,7 +328,78 @@ public abstract class EmbeddedActivityAgent extends ActivityAgent {
 			}
 			return false;
 		}
-		
+
+		public static void attach(Activity hostActivity,
+				Activity embeddedActivity) {
+			try {
+				Method[] methods = Activity.class.getDeclaredMethods();
+				for (Method m: methods) {
+					if (m.getName().startsWith("attach")) {
+						Log.d(TAG, "method name: " + m.getName());
+						Log.d(TAG, "paramter: [");
+						Class<?>[] parameterTypes = m.getParameterTypes();
+						for (Class p : parameterTypes) {
+							Log.d(TAG, "" + p.getCanonicalName());
+						}
+						Log.d(TAG, "]");
+					}
+				}
+				/*
+				 *     final void attach(Context context, ActivityThread aThread,
+            Instrumentation instr, IBinder token, int ident,
+            Application application, Intent intent, ActivityInfo info,
+            CharSequence title, Activity parent, String id,
+            NonConfigurationInstances lastNonConfigurationInstances,
+            Configuration config, IVoiceInteractor voiceInteractor) {
+				 */
+				Class<Object>[] parameters = new Class[]{Context.class, Class.forName("android.app.ActivityThread"),
+						Class.forName("android.app.Instrumentation"), Class.forName("android.os.IBinder"), int.class, Application.class,
+						Intent.class, 
+						Class.forName("android.content.pm.ActivityInfo"),
+//						Class.forName("android.os.IBinder"),
+						CharSequence.class, 
+						Activity.class, 
+						String.class,
+						Class.forName("android.app.Activity$NonConfigurationInstances"),
+						Configuration.class,
+						Class.forName("com.android.internal.app.IVoiceInteractor")
+						};
+				Method m = Activity.class.getDeclaredMethod("attach", parameters);
+				m.setAccessible(true);
+				Object[] args = new Object[]{
+						hostActivity.getBaseContext(),
+						getFiledValue(hostActivity, "mMainThread"),
+						getFiledValue(hostActivity, "mInstrumentation"),
+						getFiledValue(hostActivity, "mToken"),
+						getFiledValue(hostActivity, "mIdent"),	
+						getFiledValue(hostActivity, "mApplication"),
+						getFiledValue(hostActivity, "mIntent"),
+						getFiledValue(hostActivity, "mActivityInfo"),
+						getFiledValue(hostActivity, "mTitle"),
+						getFiledValue(hostActivity, "mParent"),
+						getFiledValue(hostActivity, "mEmbeddedID"),
+						getFiledValue(hostActivity, "mLastNonConfigurationInstances"),
+						getFiledValue(hostActivity, "mCurrentConfig"),
+						null};
+				m.invoke(embeddedActivity, args );
+			} catch (NoSuchMethodException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalArgumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
 
 		public static void attachBaseContext(Activity activity,
 				Application application) {
@@ -281,6 +449,27 @@ public abstract class EmbeddedActivityAgent extends ActivityAgent {
 //		    		"mBase", // android.content.ContextWrapper
 		    };
 		    copyFields(ContextWrapper.class, fields, host, target);
+		    
+		    try {
+			    LayoutInflater in = LayoutInflater.from(host);
+			    
+				Field inflator = Class.forName("com.android.internal.policy.impl.PhoneWindow").getDeclaredField("mLayoutInflater");
+				inflator.setAccessible(true);
+				Object winF = getFiledValue(host, "mWindow");
+				inflator.set(winF, in);
+			} catch (NoSuchFieldException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalArgumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 

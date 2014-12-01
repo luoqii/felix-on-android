@@ -24,6 +24,7 @@ import android.util.TypedValue;
  * we assume that: 
  *  1) if first resource search failed, so second must be success, so 
  *  we only catch exception for first resource.
+ *  
  * @author luoqii
  *
  */
@@ -613,6 +614,32 @@ extends Resources
 			}
 		}
 		mSecond.parseBundleExtra(tagName, attrs, outBundle);
+	}
+
+	@Override
+	public Drawable getDrawable(int id, Theme theme) throws NotFoundException {
+		
+		try {
+			return mFirst.getDrawable(id, theme);
+		} catch (NotFoundException e) {
+			if (DEBUG) {
+				e.printStackTrace();
+			}
+		}
+		return mSecond.getDrawable(id, theme);
+	}
+
+	@Override
+	public Drawable getDrawableForDensity(int id, int density, Theme theme) {
+		
+		try {
+			return mFirst.getDrawableForDensity(id, density, theme);
+		} catch (NotFoundException e) {
+			if (DEBUG) {
+				e.printStackTrace();
+			}
+		}
+		return mSecond.getDrawableForDensity(id, density, theme);
 	}
 	
 	

@@ -44,8 +44,17 @@
         </activity>
         
         <activity
-            android:name="org.bbs.osgi.activity.BundleActivity"  
+            android:name="org.bbs.osgi.activity.BundleActivity"
             android:label="BundleActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="org.bbs.osgi.activity.EmbeddedBundleActivity"  
+            android:label="EmbeddedActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
