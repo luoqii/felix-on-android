@@ -180,6 +180,7 @@ public class FelixWrapper{
 	        "android.app," + 
 	        "android.content," + 
 	        "android.content.res," + 
+	        "android.content.pm," + 
 	        "android.database," + 
 	        "android.database.sqlite," + 
 	        "android.graphics, " + 

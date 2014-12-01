@@ -55,7 +55,8 @@ FragmentActivity
 	public static final String DEFAULT_LAUNCHER_SERVICE_NAME = 
 //			"org.bbs.bundlemgr.BundleList" 
 //			"org.bbs.bundlemgr.SimpleBundleList"
-			"com.example.android.apis.ApiDemos"
+//			"com.example.android.apis.ApiDemos"
+					"com.example.android.apis.Activator$EmbeddedApiDemos"
 			;
 	public static final String DEFAULT_LAUNCHER_SERVICE_FILTER = "";
 	
@@ -246,12 +247,12 @@ FragmentActivity
 
 	private Resources getBundleResources(org.osgi.framework.Bundle bundle) {
 			File resApk = getFileStreamPath("id" + bundle.getBundleId() + "_v" + bundle.getVersion());
-			
+
 			//debug
 			resApk.delete();
 			
 			if (!resApk.exists()) {
-				URL url = bundle.getResource(RES_PATH_APK_RES);
+				URL url = bundle.getResource(".");
 				try {
 					InputStream ins = url.openStream();
 					OutputStream ous = new FileOutputStream(resApk);

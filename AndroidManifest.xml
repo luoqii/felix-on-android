@@ -45,7 +45,7 @@
         
         <activity
             android:name="org.bbs.osgi.activity.BundleActivity"  
-            android:label="BandleManager" >
+            android:label="BundleActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

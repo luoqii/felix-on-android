@@ -16,3 +16,10 @@ see:http://code.google.com/p/felix-on-android/
   * 更加复杂的后台?
   * 对传统android开发人员的挑战（引入额外的开发模型，工具的支持（ant, adt, gradle?），osgi 相关知识）;
   * native支持
+NOTE
+====
+do not denpendent some specific osgi impl, just use stardard osgi feature.
+
+TODO
+====
+how to buidl felix?

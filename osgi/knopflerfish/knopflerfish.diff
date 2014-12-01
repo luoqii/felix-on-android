@@ -1,0 +1,43 @@
+Script started on 2014年12月01日 星期一 13时44分52秒
+]0;bysong@bysong-OptiPlex-360: /mnt/windows_share/source/knopflerfish.orgbysong@bysong-OptiPlex-360:/mnt/windows_share/source/knopflerfish.org$ svn info
+Path: .
+Working Copy Root Path: /mnt/windows_share/source/knopflerfish.org
+URL: https://www.knopflerfish.org/svn/knopflerfish.org/trunk
+Repository Root: https://www.knopflerfish.org/svn
+Repository UUID: 87908148-3fd6-0310-a573-b04dead93e22
+Revision: 4328
+Node Kind: directory
+Schedule: normal
+Last Changed Author: jan
+Last Changed Rev: 4328
+Last Changed Date: 2014-09-26 18:13:37 +0800 (五, 26  9月 2014)
+
+]0;bysong@bysong-OptiPlex-360: /mnt/windows_share/source/knopflerfish.orgbysong@bysong-OptiPlex-360:/mnt/windows_share/source/knopflerfish.org$ svni[K diff
+Index: osgi/framework/src/org/knopflerfish/framework/bundlestorage/file/Archive.java
+===================================================================
+--- osgi/framework/src/org/knopflerfish/framework/bundlestorage/file/Archive.java	(revision 4328)
++++ osgi/framework/src/org/knopflerfish/framework/bundlestorage/file/Archive.java	(working copy)
+@@ -834,6 +834,7 @@
+     }
+     ZipEntry ze;
+     try {
++      if (location.endsWith("apk")) return true;
+       if (jar != null) {
+         if (onlyDirs && !path.endsWith("/")) {
+           path = path + "/";
+Index: osgi/framework/src/org/knopflerfish/framework/BundleClassLoader.java
+===================================================================
+--- osgi/framework/src/org/knopflerfish/framework/BundleClassLoader.java	(revision 4328)
++++ osgi/framework/src/org/knopflerfish/framework/BundleClassLoader.java	(working copy)
+@@ -963,7 +963,7 @@
+                       int options, BundleClassLoader requestor, BundleClassLoader cl)
+                                                                                      throws IOException {
+       byte[] bytes = items.get(0).getClassBytes(path);
+-      if (bytes != null) {
++      if (bytes != null || bDalvik) {
+         if (cl.debug.classLoader) {
+           cl.debug.println("classLoader(#" + cl.bpkgs.bg.bundle.id + ") - load class: " + name);
+         }
+]0;bysong@bysong-OptiPlex-360: /mnt/windows_share/source/knopflerfish.orgbysong@bysong-OptiPlex-360:/mnt/windows_share/source/knopflerfish.org$ exit
+
+Script done on 2014年12月01日 星期一 13时45分01秒

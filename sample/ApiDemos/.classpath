@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
+	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
-	<classpathentry exported="true" kind="lib" path="/mnt/share/download/adt-bundle-linux-x86_64-20140702/sdk/extras/android/support/v4/android-support-v4.jar"/>
-<<<<<<< Upstream, based on branch 'embedActivity' of git@github.com:luoqii/felix-on-android.git
-	<classpathentry kind="lib" path="/FelixOnAndroid/libs/felix.jar"/>
+	<classpathentry kind="lib" path="/mnt/windows_share/download/adt-bundle-linux-x86_64-20140702/sdk/extras/android/support/v4/android-support-v4.jar"/>
+	<classpathentry kind="lib" path="/FelixOnAndroid/lib/framework.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/FelixOnAndroid"/>
-=======
-	<classpathentry combineaccessrules="false" kind="src" path="/FelixOnAndroid"/>
-	<classpathentry kind="lib" path="/FelixOnAndroid/osgi/knopflerfish/framework-6.0.4.jar"/>
->>>>>>> 29c0aea add apidemo.
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
