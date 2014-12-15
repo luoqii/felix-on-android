@@ -1,0 +1,53 @@
+diff --git a/legacy/ant-tasks/src/main/java/com/android/ant/SignApkTask.java b/legacy/ant-tasks/src/main/java/com/android/ant/SignApkTask.java
+index 6c29d68..0975cee 100644
+--- a/legacy/ant-tasks/src/main/java/com/android/ant/SignApkTask.java
++++ b/legacy/ant-tasks/src/main/java/com/android/ant/SignApkTask.java
+@@ -70,7 +70,7 @@ public class SignApkTask extends SingleInputOutputTask {
+         SignedJarBuilder mBuilder = null;
+         try {
+             mBuilder = new SignedJarBuilder(
+-                    new FileOutputStream(getOutput(), false /* append */),
++                    new FileOutputStream(getOutput(), false /* append */),null,
+                     key.getPrivateKey(), (X509Certificate) key.getCertificate());
+ 
+             mBuilder.writeZip(new FileInputStream(getInput()), new NullZipFilter());
+diff --git a/sdklib/src/main/java/com/android/sdklib/build/ApkBuilder.java b/sdklib/src/main/java/com/android/sdklib/build/ApkBuilder.java
+index 4a69e2e..ba4eeae 100644
+--- a/sdklib/src/main/java/com/android/sdklib/build/ApkBuilder.java
++++ b/sdklib/src/main/java/com/android/sdklib/build/ApkBuilder.java
+@@ -443,8 +443,9 @@ public final class ApkBuilder implements IArchiveBuilder {
+             }
+             mVerboseStream = verboseStream;
+ 
++            File manifestFile = new File(mDexFile.getParentFile().getParentFile(), "bundle.mf");
+             mBuilder = new SignedJarBuilder(
+-                    new FileOutputStream(mApkFile, false /* append */), key,
++                    new FileOutputStream(mApkFile, false /* append */), manifestFile, key,
+                     certificate);
+ 
+             verbosePrintln("Packaging %s", mApkFile.getName());
+diff --git a/sdklib/src/main/java/com/android/sdklib/internal/build/SignedJarBuilder.java b/sdklib/src/main/java/com/android/sdklib/internal/build/SignedJarBuilder.java
+index 2faba6a..702fa11 100644
+--- a/sdklib/src/main/java/com/android/sdklib/internal/build/SignedJarBuilder.java
++++ b/sdklib/src/main/java/com/android/sdklib/internal/build/SignedJarBuilder.java
+@@ -161,7 +161,7 @@ public class SignedJarBuilder {
+      * @throws IOException
+      * @throws NoSuchAlgorithmException
+      */
+-    public SignedJarBuilder(OutputStream out, PrivateKey key, X509Certificate certificate)
++    public SignedJarBuilder(OutputStream out, File manifestFile, PrivateKey key, X509Certificate certificate)
+             throws IOException, NoSuchAlgorithmException {
+         mOutputJar = new JarOutputStream(new BufferedOutputStream(out));
+         mOutputJar.setLevel(9);
+@@ -169,7 +169,11 @@ public class SignedJarBuilder {
+         mCertificate = certificate;
+ 
+         if (mKey != null && mCertificate != null) {
++        	if (null != manifestFile && manifestFile.exists()){
++                mManifest = new Manifest(new FileInputStream(manifestFile));
++        	} else {
+             mManifest = new Manifest();
++        	}
+             Attributes main = mManifest.getMainAttributes();
+             main.putValue("Manifest-Version", "1.0");
+             main.putValue("Created-By", "1.0 (Android)");
