@@ -16,10 +16,22 @@ see:http://code.google.com/p/felix-on-android/
   * 更加复杂的后台?
   * 对传统android开发人员的挑战（引入额外的开发模型，工具的支持（ant, adt, gradle?），osgi 相关知识）;
   * native支持
+
 NOTE
 ====
 do not denpendent some specific osgi impl, just use stardard osgi feature.
 
+PROBLEM
+=======
+Toast
+do not user Activity.this (directly or indirectly) in embedded activiy.
+MarginLayout
+overridePendingTransition(0, 0)
+
 TODO
 ====
 how to buidl felix?
+
+SEE
+===
+https://android-review.googlesource.com/#/c/119402/

@@ -9,7 +9,7 @@ import android.content.res.Resources;
  * @author bysong
  *
  */
-class LazyContext extends ContextWrapper {
+public class LazyContext extends ContextWrapper {
 
 	private Resources mResource;
 

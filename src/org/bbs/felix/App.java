@@ -1,8 +1,8 @@
 package org.bbs.felix;
 
-import android.app.Application;
+import org.bbs.osgi.activity.BundleApplication;
 
-public class App extends Application{
+public class App extends BundleApplication {
 	@Override
 	public void onCreate() {
 		super.onCreate();

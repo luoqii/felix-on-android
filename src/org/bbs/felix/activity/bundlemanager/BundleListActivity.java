@@ -69,7 +69,7 @@ public class BundleListActivity extends FragmentActivity {
 				}
 				Log.d(TAG, "path: " + path);
 				
-				FelixWrapper.getInstance(this).getFramework().getBundleContext().installBundle(path, new FileInputStream(new File(path)));
+				FelixWrapper.getInstance(null).getFramework().getBundleContext().installBundle(path, new FileInputStream(new File(path)));
 				updateUI();
 			} catch (BundleException e) {
 				// TODO Auto-generated catch block

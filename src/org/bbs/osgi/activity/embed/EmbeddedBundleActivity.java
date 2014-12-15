@@ -1,4 +1,4 @@
-package org.bbs.osgi.activity;
+package org.bbs.osgi.activity.embed;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -10,6 +10,7 @@ import java.lang.reflect.Method;
 import java.net.URL;
 
 import org.bbs.felix.FelixWrapper;
+import org.bbs.osgi.activity.BundleActivity;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
@@ -30,16 +31,17 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 /**
- * 
+ *  all method will call through {@link #mTargetActivity}, so, we can
+ *  "embed' an exist activity to {@link BundleActivity}.
  * @author luoqii
  *
- * @see {@link ActivityAgent}
  */
 public class EmbeddedBundleActivity extends BundleActivity
 {
 	
 	
-	private int mThemeResId = android.R.style.Theme_Black;
+	private int mThemeResId = android.R.style.Theme_Holo_Light;
+	private Theme mTheme;
 
 	@Override
 	public void setTheme(int resid) {
@@ -51,9 +53,13 @@ public class EmbeddedBundleActivity extends BundleActivity
 	@Override
 	public Theme getTheme() {
 //		return super.getTheme();
-		Theme theme = getResources().newTheme();
-		// TODO how to get an un-installed apk's theme.
-		theme.applyStyle(mThemeResId, true);
-		return theme;
+		boolean first = mTheme == null;
+		if (first) {
+			mTheme = getResources().newTheme();
+			// TODO how to get an un-installed apk's theme.
+			mTheme.applyStyle(mThemeResId, true);
+		}
+		
+		return mTheme;
 	}
 }

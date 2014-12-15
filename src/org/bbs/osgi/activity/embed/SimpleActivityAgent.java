@@ -1,4 +1,4 @@
-package org.bbs.osgi.activity;
+package org.bbs.osgi.activity.embed;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -17,8 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 /**
- *  all method will call through {@link #mTargetActivity}, so, we can
- *  "embed' an exist activity to {@link BundleActivity}.
+ *
  * @author luoqii
  *
  */

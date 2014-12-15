@@ -1,8 +1,11 @@
-package org.bbs.osgi.activity;
+package org.bbs.osgi.activity.embed;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+
+import org.bbs.osgi.activity.ActivityAgent;
+import org.bbs.osgi.activity.BundleActivity;
 
 import android.app.Activity;
 import android.app.Application;
@@ -37,24 +40,28 @@ public abstract class EmbeddedActivityAgent extends ActivityAgent {
 	protected void onCreate(Bundle savedInstanceState) {
 		mTargetActivity = getTargetActivity();
 		
+		if (null == mTargetActivity) {
+			throw new IllegalStateException("target activity is null");
+		}
+		
 		// prepare new activity.
 //		ActivityUtil.attach(mHostActivity, mTargetActivity);
-		ActivityUtil.attachBaseContext(mTargetActivity, mHostActivity.getApplication());
-		ActivityUtil.copyFields(mHostActivity, mTargetActivity);
+		ActivityReflectUtil.attachBaseContext(mTargetActivity, mHostActivity.getApplication());
+		ActivityReflectUtil.copyFields(mHostActivity, mTargetActivity);
 		
-		ActivityUtil.onCreate(mTargetActivity, savedInstanceState);
+		ActivityReflectUtil.onCreate(mTargetActivity, savedInstanceState);
 	}
 	
 	protected void onResume() {
-		ActivityUtil.onResume(mTargetActivity);
+		ActivityReflectUtil.onResume(mTargetActivity);
 	}
 
 	protected void onPause() {
-		ActivityUtil.onPause(mTargetActivity);
+		ActivityReflectUtil.onPause(mTargetActivity);
 	}
 	
 	protected void onDestroy() {
-		ActivityUtil.onDestroy(mTargetActivity);
+		ActivityReflectUtil.onDestroy(mTargetActivity);
 	}
 	
 	
@@ -86,7 +93,7 @@ public abstract class EmbeddedActivityAgent extends ActivityAgent {
 	}
 
 	public void onActivityResult(int arg0, int arg1, Intent arg2) {
-		ActivityUtil.onActivityResult(mTargetActivity, arg0, arg1, arg2);
+		ActivityReflectUtil.onActivityResult(mTargetActivity, arg0, arg1, arg2);
 	}
 	
 	/**
@@ -95,24 +102,14 @@ public abstract class EmbeddedActivityAgent extends ActivityAgent {
 	 * @author bysong
 	 *
 	 */
-	public static class ActivityUtil {
+	public static class ActivityReflectUtil {
 		public static void onCreate(Activity activity, Bundle savedInstanceState){
 			try {
 				Method m = Activity.class.getDeclaredMethod("onCreate", new Class[]{Bundle.class});
 				m.setAccessible(true);
 				m.invoke(activity, new Object[]{savedInstanceState});
-			} catch (NoSuchMethodException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalArgumentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} catch (Exception e) {
+				throw new RuntimeException("error in onCreate", e);
 			}
 		}
 		
@@ -121,18 +118,8 @@ public abstract class EmbeddedActivityAgent extends ActivityAgent {
 				Method m = Activity.class.getDeclaredMethod("onResume", (Class[]) null);
 				m.setAccessible(true);
 				m.invoke(activity, (Object[]) null);
-			} catch (NoSuchMethodException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalArgumentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} catch (Exception e) {
+				throw new RuntimeException("error in onResume", e);
 			}
 		}
 		
@@ -141,61 +128,20 @@ public abstract class EmbeddedActivityAgent extends ActivityAgent {
 				Method m = Activity.class.getDeclaredMethod("onPause", (Class[]) null);
 				m.setAccessible(true);
 				m.invoke(activity, (Object[]) null);
-			} catch (NoSuchMethodException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalArgumentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} catch (Exception e) {
+				throw new RuntimeException("error in onPause", e);
 			}
 		}
 		
 		public static void onDestroy(Activity activity){
 			try {
-				Method m = Activity.class.getDeclaredMethod("onResume", (Class[])null);
+				Method m = Activity.class.getDeclaredMethod("onDestroy", (Class[])null);
 				m.setAccessible(true);
 				m.invoke(activity, (Object[])null);
-			} catch (NoSuchMethodException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalArgumentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} catch (Exception e) {
+				throw new RuntimeException("error in onDestroy", e);
 			}
-		}
-		
-		public static void onResume(Activity activity, Bundle savedInstanceState){
-			try {
-				Method m = Activity.class.getDeclaredMethod("onResume", new Class[]{Bundle.class});
-				m.setAccessible(true);
-				m.invoke(activity, new Object[]{savedInstanceState});
-			} catch (NoSuchMethodException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalArgumentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		
+		}		
 
 		public static void onContextMenuClosed(Activity activity,
 				Menu menu) {
@@ -328,32 +274,32 @@ public abstract class EmbeddedActivityAgent extends ActivityAgent {
 			}
 			return false;
 		}
+		
+		public static void dumpMethod(Class clazz, String methodName){
+			Method[] methods = clazz.getDeclaredMethods();
+			for (Method m: methods) {
+				if (m.getName().startsWith(methodName)) {
+					Log.d(TAG, "method name: " + m.getName());
+					Log.d(TAG, "paramter: [");
+					Class<?>[] parameterTypes = m.getParameterTypes();
+					for (Class p : parameterTypes) {
+						Log.d(TAG, "" + p.getCanonicalName());
+					}
+					Log.d(TAG, "]");
+				}
+			}
+		}
 
 		public static void attach(Activity hostActivity,
 				Activity embeddedActivity) {
 			try {
-				Method[] methods = Activity.class.getDeclaredMethods();
-				for (Method m: methods) {
-					if (m.getName().startsWith("attach")) {
-						Log.d(TAG, "method name: " + m.getName());
-						Log.d(TAG, "paramter: [");
-						Class<?>[] parameterTypes = m.getParameterTypes();
-						for (Class p : parameterTypes) {
-							Log.d(TAG, "" + p.getCanonicalName());
-						}
-						Log.d(TAG, "]");
-					}
-				}
-				/*
-				 *     final void attach(Context context, ActivityThread aThread,
-            Instrumentation instr, IBinder token, int ident,
-            Application application, Intent intent, ActivityInfo info,
-            CharSequence title, Activity parent, String id,
-            NonConfigurationInstances lastNonConfigurationInstances,
-            Configuration config, IVoiceInteractor voiceInteractor) {
-				 */
+//				dumpMethod(Activity.class,"attach");
 				Class<Object>[] parameters = new Class[]{Context.class, Class.forName("android.app.ActivityThread"),
-						Class.forName("android.app.Instrumentation"), Class.forName("android.os.IBinder"), int.class, Application.class,
+						Class.forName("android.app.Instrumentation"), 
+						Class.forName("android.os.IBinder"), 
+						// not Integer.class
+						int.class, 
+						Application.class,
 						Intent.class, 
 						Class.forName("android.content.pm.ActivityInfo"),
 //						Class.forName("android.os.IBinder"),
@@ -498,20 +444,31 @@ public abstract class EmbeddedActivityAgent extends ActivityAgent {
 		        e.printStackTrace();
 		    }
 		}
+		
+		public static  Field getFiled(Object object, String fieldName) {
+			Class<?> ACTIVITY;
+			try {
+				ACTIVITY = Class.forName("android.app.Activity");
+	            Field declaredField = ACTIVITY.getDeclaredField(fieldName);
+	            
+	            return declaredField;
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NoSuchFieldException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			return null;
+		}
 
 		public static  Object getFiledValue(Object object, String fieldName) {
 		        Object f = null;
 		        try {
-		            Class<?> ACTIVITY = Class.forName("android.app.Activity");
-		            Field declaredField = ACTIVITY.getDeclaredField(fieldName);
+		            Field declaredField = getFiled(object, fieldName);
 		            declaredField.setAccessible(true);
 		            f = declaredField.get(object);
-		        } catch (ClassNotFoundException e) {
-		            // TODO Auto-generated catch block
-		            e.printStackTrace();
-		        } catch (NoSuchFieldException e) {
-		            // TODO Auto-generated catch block
-		            e.printStackTrace();
 		        } catch (IllegalArgumentException e) {
 		            // TODO Auto-generated catch block
 		            e.printStackTrace();

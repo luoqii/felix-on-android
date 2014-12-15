@@ -50,6 +50,11 @@ public class FelixWrapper{
 		HashMap<String, String> configMap = new HashMap<String, String>();
 		configMap.put(Constants.FRAMEWORK_STORAGE, mCacheDir);
 		configMap.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA, ANDROID_PACKAGES_FOR_EXPORT_EXTRA);
+		Log.d(TAG, "ANDROID_PACKAGE : " + ANDROID_PACKAGE);
+		Log.d(TAG, "ANDROID_PACKAGE_V4 : " + ANDROID_PACKAGE_V4);
+		Log.d(TAG, "APP_PACKAGE : " + APP_PACKAGE);
+		Log.d(TAG, "THIRD_PACKAGE : " + THIRD_PACKAGE);
+		Log.d(TAG, Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA + ": " + ANDROID_PACKAGES_FOR_EXPORT_EXTRA);
 		
 //		configMap.put(FelixConstants.LOG_LEVEL_PROP, 4 + "");
 		
@@ -170,90 +175,156 @@ public class FelixWrapper{
 	}
 	
 	// copied from http://code.google.com/p/felix-on-android/
-	private static final String ANDROID_PACKAGES_FOR_EXPORT_EXTRA = 
-			"org.bbs.osgi.activity," +
-			"org.bbs.felix.activity.ActivityAgent," +
-			"org.bbs.felix.activity.bundlemanager," + 
-			"org.bbs.felixonandroid," + 
-			//android
-	        "android, " + 
-	        "android.app," + 
-	        "android.content," + 
-	        "android.content.res," + 
-	        "android.content.pm," + 
-	        "android.database," + 
-	        "android.database.sqlite," + 
-	        "android.graphics, " + 
-	        "android.graphics.drawable, " + 
-	        "android.graphics.glutils, " + 
-	        "android.hardware, " + 
-	        "android.location, " + 
-	        "android.media, " + 
-	        "android.net, " + 
-	        "android.opengl, " + 
-	        "android.os, " + 
-	        "android.os.bundle, " + 
-	        "android.provider, " + 
-	        "android.sax, " + 
-	        "android.speech.recognition, " + 
-	        "android.telephony, " + 
-	        "android.telephony.gsm, " + 
-	        "android.text, " + 
-	        "android.text.method, " + 
-	        "android.text.style, " + 
-	        "android.text.util, " + 
-	        "android.util, " + 
-	        "android.view, " + 
-	        "android.view.animation, " + 
-	        "android.webkit, " + 
-	        "android.widget, " + 
-	        
-	        // support v4
-	        "android.support.v4.app," + 
-	        
+	private static String ANDROID_PACKAGES_FOR_EXPORT_EXTRA = null;
+	private static String THIRD_PACKAGE  =
 	        // JAVAx
-	        "javax.crypto; " + 
-	        "javax.crypto.interfaces; " + 
-	        "javax.crypto.spec; " + 
-	        "javax.microedition.khronos.opengles; " + 
-	        "javax.net; " + 
-	        "javax.net.ssl; " + 
-	        "javax.security.auth; " + 
-	        "javax.security.auth.callback; " + 
-	        "javax.security.auth.login; " + 
-	        "javax.security.auth.x500; " + 
-	        "javax.security.cert; " + 
-	        "javax.sound.midi; " + 
-	        "javax.sound.midi.spi; " + 
-	        "javax.sound.sampled; " + 
-	        "javax.sound.sampled.spi; " + 
-	        "javax.sql; " + 
-	        "javax.xml.parsers; " + 
+	        "javax.crypto, " + 
+	        "javax.crypto.interfaces, " + 
+	        "javax.crypto.spec, " + 
+	        "javax.microedition.khronos.opengles, " + 
+	        "javax.net, " + 
+	        "javax.net.ssl, " + 
+	        "javax.security.auth, " + 
+	        "javax.security.auth.callback, " + 
+	        "javax.security.auth.login, " + 
+	        "javax.security.auth.x500, " + 
+	        "javax.security.cert, " + 
+	        "javax.sound.midi, " + 
+	        "javax.sound.midi.spi, " + 
+	        "javax.sound.sampled, " + 
+	        "javax.sound.sampled.spi, " + 
+	        "javax.sql, " + 
+	        "javax.xml.parsers, " + 
 	        //JUNIT
-	        "junit.extensions; " + 
-	        "junit.framework; " + 
+	        "junit.extensions, " + 
 	        //APACHE
-	        "org.apache.commons.codec; " + 
-	        "org.apache.commons.codec.binary; " + 
-	        "org.apache.commons.codec.language; " + 
-	        "org.apache.commons.codec.net; " + 
-	        "org.apache.commons.httpclient; " + 
-	        "org.apache.commons.httpclient.auth; " + 
-	        "org.apache.commons.httpclient.cookie; " + 
-	        "org.apache.commons.httpclient.methods; " + 
-	        "org.apache.commons.httpclient.methods.multipart; " + 
-	        "org.apache.commons.httpclient.params; " + 
-	        "org.apache.commons.httpclient.protocol; " + 
-	        "org.apache.commons.httpclient.util; " + 
+	        "org.apache.commons.codec, " + 
+	        "org.apache.commons.codec.binary, " + 
+	        "org.apache.commons.codec.language, " + 
+	        "org.apache.commons.codec.net, " + 
+	        "org.apache.commons.httpclient, " + 
+	        "org.apache.commons.httpclient.auth, " + 
+	        "org.apache.commons.httpclient.cookie, " + 
+	        "org.apache.commons.httpclient.methods, " + 
+	        "org.apache.commons.httpclient.methods.multipart, " + 
+	        "org.apache.commons.httpclient.params, " + 
+	        "org.apache.commons.httpclient.protocol, " + 
+	        "org.apache.commons.httpclient.util, " + 
 	        
 	        //OTHERS
-	        "org.bluez; " + 
-	        "org.json; " + 
-	        "org.w3c.dom; " + 
-	        "org.xml.sax; " + 
-	        "org.xml.sax.ext; " + 
-	        "org.xml.sax.helpers; " +
+	        "org.bluez, " + 
+	        "org.json, " + 
+	        "org.w3c.dom, " + 
+	        "org.xml.sax, " + 
+	        "org.xml.sax.ext, " + 
+	        "org.xml.sax.helpers, " +
 	        
 	        // this no ';' or ',' , shit.
-	        "net.neosum.android.view";
+	        "net.neosum.android.view,";
+	
+	private static String APP_PACKAGE = 
+			"org.bbs.osgi.activity," +
+			"org.bbs.osgi.activity.embed," +
+			"org.bbs.felix.activity.ActivityAgent," +
+			"org.bbs.felix.activity.bundlemanager," + 
+			"org.bbs.felixonandroid,"
+			;
+
+	private static String ANDROID_PACKAGE_V4 = 
+	        ""
+			;
+	
+	//see http://developer.android.com/reference/android/package-summary.html
+	// api level 21
+	private static String ANDROID_PACKAGE = 
+        "android, " + 
+        "android.app," + 
+        "android.animation," + 
+        "android.content," + 
+        "android.content.res," + 
+        "android.content.pm," + 
+        "android.database," + 
+        "android.database.sqlite," + 
+        "android.graphics, " + 
+        "android.graphics.drawable, " + 
+        "android.graphics.glutils, " + 
+        "android.hardware, " + 
+        "android.location, " + 
+        "android.media, " + 
+        "android.net, " + 
+        "android.net.wifi, " + 
+        "android.opengl, " + 
+        "android.os, " + 
+        "android.os.bundle, " + 
+        "android.preference, " +
+        "android.provider, " + 
+        "android.sax, " + 
+        "android.speech.recognition, " + 
+        "android.telephony, " + 
+        "android.telephony.gsm, " + 
+        "android.text, " + 
+        "android.text.method, " + 
+        "android.text.style, " + 
+        "android.text.util, " + 
+        "android.util, " + 
+        "android.view, " + 
+        "android.view.animation, " + 
+        "android.webkit, " + 
+        "android.widget, " + 
+        
+        "junit.framework, " + 
+        "junit.runner, " + 
+	    "org.apache.http, " + 
+	    "org.apache.http.auth, " + 
+	    "org.apache.http.auth.params, " + 
+	    "org.apache.http.client, " + 
+	    "org.apache.http.client.entity, " + 
+	    "org.apache.http.client.methods, " + 
+	    "org.apache.http.client.params, " + 
+	    "org.apache.http.client.protocol, " + 
+	    "org.apache.http.client.utils, " + 
+	    "org.apache.http.conn, " + 
+	    "org.apache.http.conn.params, " + 
+	    "org.apache.http.conn.routing, " + 
+	    "org.apache.http.conn.scheme, " + 
+	    "org.apache.http.conn.ssl, " + 
+	    "org.apache.http.conn.util, " + 
+	    "org.apache.http.cookie, " + 
+	    "org.apache.http.cookie.params, " + 
+	    "org.apache.http.entity, " + 
+	    "org.apache.http.impl, " + 
+	    "org.apache.http.impl.auth, " + 
+	    "org.apache.http.impl.client, " + 
+	    "org.apache.http.impl.conn, " + 
+	    "org.apache.http.impl.conn.tsccm, " + 
+	    "org.apache.http.impl.cookie, " + 
+	    "org.apache.http.impl.entity, " + 
+	    "org.apache.http.impl.io, " + 
+	    "org.apache.http.io, " + 
+	    "org.apache.http.message, " + 
+	    "org.apache.http.params, " + 
+	    "org.apache.http.impl, " + 
+	    "org.apache.http.protocol, " + 
+	    "org.apache.http.util, " + 	    
+	    "org.json, " + 
+	    "org.w3c.dom, " + 
+	    "org.w3c.dom.ls, " + 
+	    "org.xml.sax, " + 
+	    "org.xml.sax.extv, " + 
+	    "org.xml.sax.helpers, " + 
+	    "org.xmlpull.v1, " + 
+	    "org.xmlpull.v1.sax2, " + 
+	    
+	    ""
+	;
+	
+	static {
+		ANDROID_PACKAGES_FOR_EXPORT_EXTRA += "," + ANDROID_PACKAGE;
+		ANDROID_PACKAGES_FOR_EXPORT_EXTRA += ANDROID_PACKAGE_V4;
+		ANDROID_PACKAGES_FOR_EXPORT_EXTRA += APP_PACKAGE;
+		ANDROID_PACKAGES_FOR_EXPORT_EXTRA += THIRD_PACKAGE;
+
+		ANDROID_PACKAGES_FOR_EXPORT_EXTRA = ANDROID_PACKAGES_FOR_EXPORT_EXTRA.replace("\\s*,\\s*,\\s*", "");
+		ANDROID_PACKAGES_FOR_EXPORT_EXTRA = ANDROID_PACKAGES_FOR_EXPORT_EXTRA.replace("\\s*,\\s*$", "");
+	}
 }
