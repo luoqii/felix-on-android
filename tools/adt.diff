@@ -1,0 +1,112 @@
+bysong@bysong-OptiPlex-360:/mnt/windows_share/android.studio/tools/base$ git log
+commit 374392895b4172722d8f53521e303c80fca96f7a
+Author: luo qii <bangbangiandroid@gmail.com>
+Date:   Thu Dec 4 16:33:21 2014 +0800
+
+    make apk file as a valid osgi bundle.
+    
+    the default apk has not a valid META-INF/MANEFEST.MF file, to make
+    this, to add a valid manifest file in project's root dir, the new
+    adt tool will do this for u.
+    Signed-off-by: luo qii <bangbangiandroid@gmail.com>
+    
+    Change-Id: Ibca1e30ac1135c8e4b6cec0207272a76618cb587
+
+commit 6ba460892521f76d451efe7b0214cc46a4459adc
+Merge: 0022925 617bda9
+Author: Tor Norbye <tnorbye@google.com>
+Date:   Fri Aug 8 19:12:49 2014 +0000
+
+    Merge "Handle leading zeroes in Gradle coordinates" into idea133-milestone
+
+commit 617bda929900f8aba95ed5b6f398ad5aab63e24e
+Author: Tor Norbye <tnorbye@google.com>
+Date:   Thu Aug 7 17:20:08 2014 -0700
+
+    Handle leading zeroes in Gradle coordinates
+    
+    Fixes 74612: GMS Update Dialog Incorrect
+    
+    Change-Id: I6e78e79676ced08f5358c47e0c104a57a3fa935c
+    (cherry picked from commit e17ff317cb38bc7676897d03b68d4cdc9bdb880d)
+
+commit 002292560649bf4fa6cd0a91cde6297734e20b6a
+Merge: 20ff669 ee75028
+Author: Jerome Dochez <jedo@google.com>
+Date:   Thu Aug 7 18:25:03 2014 +0000
+
+    Merge "Do not fail non resolved placeholder in libraries" into idea133-milestone
+
+commit ee75028d89470ac229001cc4f4830a8fd4f33063
+Author: Jerome Dochez <jedo@google.com>
+Date:   Thu Jul 3 02:55:12 2014 -0700
+
+    Do not fail non resolved placeholder in libraries
+    
+    When placeholders are not resolved in library files, it is now considered
+    that the resolution will be provided during application building.
+    This allows to put placeholders in built library files and have
+    such placeholders resolved per application.
+    
+    Change-Id: I6447ba3b3c5bf0f43d1c24e782d8719d3b605294
+    
+    Conflicts:
+        build-system/manifest-merger/src/test/java/com/android/manifmerger/ManifestMerger2Test.java
+
+commit 20ff669d6b4eb17e709eb78e250953b9fb6c4c85
+bysong@bysong-OptiPlex-360:/mnt/windows_share/android.studio/tools/base$ git diff HEAD HEAD^
+diff --git a/legacy/ant-tasks/src/main/java/com/android/ant/SignApkTask.java b/legacy/ant-tasks/src/main/java/com/android/ant/SignApkTask.java
+index 0975cee..6c29d68 100644
+--- a/legacy/ant-tasks/src/main/java/com/android/ant/SignApkTask.java
++++ b/legacy/ant-tasks/src/main/java/com/android/ant/SignApkTask.java
+@@ -70,7 +70,7 @@ public class SignApkTask extends SingleInputOutputTask {
+         SignedJarBuilder mBuilder = null;
+         try {
+             mBuilder = new SignedJarBuilder(
+-                    new FileOutputStream(getOutput(), false /* append */),null,
++                    new FileOutputStream(getOutput(), false /* append */),
+                     key.getPrivateKey(), (X509Certificate) key.getCertificate());
+ 
+             mBuilder.writeZip(new FileInputStream(getInput()), new NullZipFilter());
+diff --git a/sdklib/src/main/java/com/android/sdklib/build/ApkBuilder.java b/sdklib/src/main/java/com/android/sdklib/build/ApkBuilder.java
+index ba4eeae..4a69e2e 100644
+--- a/sdklib/src/main/java/com/android/sdklib/build/ApkBuilder.java
++++ b/sdklib/src/main/java/com/android/sdklib/build/ApkBuilder.java
+@@ -443,9 +443,8 @@ public final class ApkBuilder implements IArchiveBuilder {
+             }
+             mVerboseStream = verboseStream;
+ 
+-            File manifestFile = new File(mDexFile.getParentFile().getParentFile(), "bundle.mf");
+             mBuilder = new SignedJarBuilder(
+-                    new FileOutputStream(mApkFile, false /* append */), manifestFile, key,
++                    new FileOutputStream(mApkFile, false /* append */), key,
+                     certificate);
+ 
+             verbosePrintln("Packaging %s", mApkFile.getName());
+diff --git a/sdklib/src/main/java/com/android/sdklib/internal/build/SignedJarBuilder.java b/sdklib/src/main/java/com/android/sdklib/internal/build/SignedJarBuilder.java
+index 702fa11..2faba6a 100644
+--- a/sdklib/src/main/java/com/android/sdklib/internal/build/SignedJarBuilder.java
++++ b/sdklib/src/main/java/com/android/sdklib/internal/build/SignedJarBuilder.java
+@@ -161,7 +161,7 @@ public class SignedJarBuilder {
+      * @throws IOException
+      * @throws NoSuchAlgorithmException
+      */
+-    public SignedJarBuilder(OutputStream out, File manifestFile, PrivateKey key, X509Certificate certificate)
++    public SignedJarBuilder(OutputStream out, PrivateKey key, X509Certificate certificate)
+             throws IOException, NoSuchAlgorithmException {
+         mOutputJar = new JarOutputStream(new BufferedOutputStream(out));
+         mOutputJar.setLevel(9);
+@@ -169,11 +169,7 @@ public class SignedJarBuilder {
+         mCertificate = certificate;
+ 
+         if (mKey != null && mCertificate != null) {
+-               if (null != manifestFile && manifestFile.exists()){
+-                mManifest = new Manifest(new FileInputStream(manifestFile));
+-               } else {
+             mManifest = new Manifest();
+-               }
+             Attributes main = mManifest.getMainAttributes();
+             main.putValue("Manifest-Version", "1.0");
+             main.putValue("Created-By", "1.0 (Android)");
+bysong@bysong-OptiPlex-360:/mnt/windows_share/android.studio/tools/base$ 
+
