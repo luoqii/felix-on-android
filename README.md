@@ -23,3 +23,8 @@ do not denpendent some specific osgi impl, just use stardard osgi feature.
 TODO
 ====
 how to buidl felix?
+
+HOW 2 use demo
+==============
+install apk & start
+install osgi bundle in /sdcard/autoextract/ folder.
